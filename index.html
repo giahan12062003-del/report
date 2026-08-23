@@ -1,180 +1,282 @@
-<!DOCTYPE html>
+from pathlib import Path
+
+html = r'''<!DOCTYPE html>
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>I Love English Club - Student Report</title>
+<title>I Love English Club | Ms. Gia Hân</title>
 <style>
-:root{--blue:#59b8c9;--blue-light:#eef9fb;--pink:#e67aa0;--pink-light:#fff3f7;--text:#26364a}
-*{box-sizing:border-box}
-body{margin:0;background:#f4f7fb;color:var(--text);font-family:Arial,Segoe UI,sans-serif;padding:25px}
-.box{max-width:920px;margin:auto;background:#fff;border-radius:22px;padding:30px;box-shadow:0 12px 35px rgba(40,50,80,.09)}
-.brand{text-align:center;margin-bottom:25px}
-.club{font-size:28px;font-weight:900;color:var(--blue);letter-spacing:.5px}
-.teacher{color:var(--pink);font-weight:800;margin-top:5px}
-.subtitle{color:#7b8794;font-size:14px;margin-top:5px}
-.form{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.field{display:flex;flex-direction:column;gap:6px}
-.full{grid-column:1/-1}
-label{font-size:12px;font-weight:800;color:#667085}
-input,textarea{width:100%;padding:11px 12px;border:1px solid #dfe5eb;border-radius:10px;outline:none;font:inherit}
-input:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px #59b8c91c}
-.buttons{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
-button{border:0;border-radius:10px;padding:12px 17px;cursor:pointer;font-weight:800}
-.primary{background:var(--blue);color:#fff}.secondary{background:var(--pink);color:#fff}
-.report{margin-top:25px;border:1px solid #dce8eb;border-radius:18px;overflow:hidden;background:#fff}
-.report-top{height:14px;background:linear-gradient(90deg,var(--blue),#83ccd5 65%,var(--pink))}
-.report-inner{padding:30px}
-.report-head{text-align:center}
-.report-head .eyebrow{font-size:11px;letter-spacing:2px;color:#7b8794;font-weight:800}
-.report-head h2{font-size:25px;margin:8px 0 4px}
-.report-head .student{font-size:18px;font-weight:800;color:var(--pink)}
-.info{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:25px 0}
-.info div{background:linear-gradient(135deg,var(--blue-light),var(--pink-light));padding:14px;border-radius:12px}
-.info small{display:block;color:#7b8794;text-transform:uppercase;font-size:10px;font-weight:800}
-.info b{display:block;margin-top:5px}
-.section-title{font-size:12px;text-transform:uppercase;letter-spacing:1px;color:#378694;font-weight:900;margin:20px 0 8px}
-.feedback{background:var(--pink-light);border-left:4px solid var(--pink);padding:17px;border-radius:0 12px 12px 0;line-height:1.7;min-height:90px}
-.signature{text-align:right;margin-top:28px;color:#7b8794;font-size:13px}
-.signature b{color:var(--pink)}
-@media(max-width:650px){.form,.info{grid-template-columns:1fr}.full{grid-column:auto}}
-@page{size:A4 portrait;margin:0}
-@media print{
- body{padding:0;background:white}
- body>*{display:none!important}
- .print-page{display:block!important;width:210mm;height:297mm;background:white}
- .report{display:block;margin:0;border:0;border-radius:0;width:210mm;height:297mm}
- .report-top{height:13mm}
- .report-inner{padding:20mm 18mm}
+:root{
+  --blue:#55b8ca;--blue2:#eaf8fb;--pink:#e7799e;--pink2:#fff0f5;
+  --navy:#26364a;--muted:#748094;--line:#dfe7ec;--white:#fff;
 }
-.print-page{display:none}
+*{box-sizing:border-box}
+body{margin:0;background:#f5f7fa;color:var(--navy);font-family:Inter,Segoe UI,Arial,sans-serif}
+button,input,textarea{font:inherit}
+.app{display:flex;min-height:100vh}
+.sidebar{width:245px;background:#fff;border-right:1px solid var(--line);padding:25px 16px;position:fixed;left:0;top:0;bottom:0}
+.logo{padding:6px 10px 28px}.logo strong{display:block;color:var(--blue);font-size:19px;letter-spacing:.5px}.logo span{font-size:11px;color:var(--pink);font-weight:800}
+.nav button{width:100%;border:0;background:transparent;text-align:left;padding:12px 14px;border-radius:12px;margin:4px 0;color:#667085;cursor:pointer;font-weight:700}
+.nav button.active,.nav button:hover{background:var(--blue2);color:#25899a}
+.main{margin-left:245px;width:calc(100% - 245px);padding:30px;max-width:1450px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:22px}
+h1{margin:0;font-size:28px}.sub{color:var(--muted);font-size:14px;margin-top:5px}
+.btn{border:0;border-radius:11px;padding:11px 16px;cursor:pointer;font-weight:800}
+.primary{background:var(--blue);color:#fff}.pink{background:var(--pink);color:#fff}.light{background:#fff;border:1px solid var(--line);color:#596273}.danger{background:#fff0f3;color:#d94f78}
+.panel{background:#fff;border:1px solid var(--line);border-radius:17px;padding:20px;box-shadow:0 7px 25px rgba(36,58,80,.05)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin-bottom:18px}.stat{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px}.stat small{color:var(--muted)}.stat b{display:block;font-size:28px;margin-top:7px}
+.grid2{display:grid;grid-template-columns:1.1fr .9fr;gap:18px}.form{display:grid;grid-template-columns:1fr 1fr;gap:13px}.field{display:flex;flex-direction:column;gap:6px}.full{grid-column:1/-1}
+label{font-size:12px;font-weight:800;color:#667085}
+input,textarea{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;outline:0;background:#fff;color:var(--navy)}
+input:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px #55b8ca1c}
+h2{font-size:17px;margin:0 0 15px}
+.skill{display:grid;grid-template-columns:1fr 95px;gap:10px;align-items:center;margin:10px 0}.skill-name{font-weight:700}
+.avg{margin-top:16px;padding:14px;border-radius:12px;background:linear-gradient(90deg,var(--blue2),var(--pink2));display:flex;justify-content:space-between;align-items:center;font-weight:900}.avg span:last-child{font-size:25px;color:var(--pink)}
+.chips{display:grid;grid-template-columns:1fr;gap:8px}.chip{border:1px solid var(--line);background:#fbfcfd;border-radius:10px;padding:10px;text-align:left;cursor:pointer;color:#596273}.chip.on{background:var(--pink2);border-color:#eda2bd;color:#c9577c;font-weight:800}
+.preview{margin-top:18px}
+.report{background:#fff;border:1px solid #dce7eb;border-radius:17px;overflow:hidden}
+.report-band{height:12px;background:linear-gradient(90deg,var(--blue),#8bced7 62%,var(--pink))}
+.report-body{padding:27px 30px}
+.report-head{text-align:center}.eyebrow{font-size:10px;letter-spacing:2.2px;color:#718096;font-weight:900}.report-head h2{font-size:25px;margin:7px 0 4px}.report-teacher{color:var(--pink);font-weight:900}
+.info{display:grid;grid-template-columns:1.4fr .8fr .9fr;gap:10px;margin:22px 0}.info-box{padding:12px 14px;border-radius:11px;background:linear-gradient(120deg,var(--blue2),var(--pink2))}.info-box small{font-size:9px;color:#788596;text-transform:uppercase;font-weight:900}.info-box b{display:block;margin-top:4px}
+.lesson{font-size:13px;color:#596273;margin:12px 0 18px}.section-title{font-size:10px;letter-spacing:1.5px;color:#328b9c;font-weight:900;text-transform:uppercase;margin:15px 0 8px}
+.report-table{width:100%;border-collapse:collapse;border:1px solid var(--line);border-radius:12px;overflow:hidden}.report-table th{background:var(--blue2);font-size:9px;color:#57707a;text-transform:uppercase;text-align:left;padding:10px}.report-table td{padding:10px;border-top:1px solid #e9eef1;font-size:12px}.report-table td:last-child{text-align:right;font-weight:900;color:var(--pink)}
+.overall{margin-top:12px;padding:13px 15px;border-radius:12px;background:linear-gradient(90deg,var(--blue2),var(--pink2));display:flex;justify-content:space-between;align-items:center}.overall b{font-size:24px;color:var(--pink)}
+.feedback{background:var(--pink2);border-left:4px solid var(--pink);padding:14px 16px;border-radius:0 11px 11px 0;line-height:1.7;font-size:12px;color:#4f5b6b;min-height:65px}
+.signature{text-align:right;margin-top:20px;color:#7c8795;font-size:11px}.signature b{color:var(--pink);font-size:13px}
+table.simple{width:100%;border-collapse:collapse}table.simple th,table.simple td{padding:11px;border-bottom:1px solid var(--line);text-align:left;font-size:13px}.badge{padding:5px 8px;border-radius:20px;background:#eef9f2;color:#24945a;font-weight:800}
+.hidden{display:none!important}.toast{position:fixed;right:20px;bottom:20px;background:#26364a;color:#fff;padding:12px 16px;border-radius:10px;opacity:0;transition:.2s}.toast.show{opacity:1}
+@media(max-width:900px){.sidebar{width:205px}.main{margin-left:205px;width:calc(100% - 205px)}.grid2{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}}
+@media(max-width:650px){.app{display:block}.sidebar{position:static;width:100%;height:auto;border-right:0;border-bottom:1px solid var(--line)}.main{margin:0;width:100%;padding:16px}.form,.info{grid-template-columns:1fr}.full{grid-column:auto}}
+@page{size:A4 portrait;margin:0}
+.pdf-page{display:none}
+@media print{
+  html,body{width:210mm;height:297mm;background:#fff!important}
+  body>*{display:none!important}
+  .pdf-page{display:block!important;width:210mm;height:297mm;background:#fff}
+  .pdf-sheet{width:210mm;height:297mm;position:relative;overflow:hidden;background:#fff}
+  .pdf-band{height:14mm;background:linear-gradient(90deg,#55b8ca,#83ced7 62%,#e7799e)}
+  .pdf-inner{padding:12mm 17mm 10mm}
+  .pdf-brand{text-align:center}.pdf-brand .eyebrow{font-size:8.5pt;letter-spacing:2.4px;color:#718096;font-weight:900}.pdf-brand h1{font-size:21pt;margin:2.5mm 0 1mm}.pdf-brand .teacher{font-size:10pt;color:#e7799e;font-weight:900}
+  .pdf-info{display:grid;grid-template-columns:1.4fr .8fr .9fr;gap:4mm;margin:8mm 0 5mm}.pdf-info-box{padding:4mm;border-radius:3mm;background:linear-gradient(120deg,#eaf8fb,#fff0f5)}.pdf-info-box small{display:block;font-size:7pt;text-transform:uppercase;color:#718096;font-weight:900}.pdf-info-box b{display:block;margin-top:1mm;font-size:9.5pt}
+  .pdf-lesson{font-size:9pt;color:#566272;margin-bottom:5mm}.pdf-title{font-size:8.5pt;letter-spacing:1.5px;text-transform:uppercase;color:#328b9c;font-weight:900;margin:4mm 0 2.5mm}
+  .pdf-table{width:100%;border-collapse:collapse;border:1px solid #dce7eb}.pdf-table th{background:#eaf8fb;color:#58737c;text-transform:uppercase;font-size:7.5pt;padding:3mm;text-align:left}.pdf-table td{font-size:9pt;padding:3mm;border-top:1px solid #e8eef1}.pdf-table td:last-child{text-align:right;font-weight:900;color:#d85f86}
+  .pdf-overall{margin-top:4mm;padding:4mm 5mm;background:linear-gradient(90deg,#eaf8fb,#fff0f5);border-radius:3mm;display:flex;justify-content:space-between;align-items:center}.pdf-overall small{font-size:7.5pt;color:#718096;text-transform:uppercase;font-weight:900}.pdf-overall b{font-size:19pt;color:#d85f86}
+  .pdf-feedback{font-size:9pt;line-height:1.65;padding:4.5mm 5mm;background:#fff5f8;border-left:4px solid #e7799e;border-radius:0 3mm 3mm 0;min-height:25mm}
+  .pdf-sign{text-align:right;margin-top:8mm;color:#7c8795;font-size:8pt}.pdf-sign b{color:#d85f86;font-size:10pt}
+  .pdf-footer{position:absolute;left:17mm;right:17mm;bottom:7mm;border-top:1px solid #e4edf0;padding-top:3mm;display:flex;justify-content:space-between;font-size:7pt;color:#7c8795}
+}
 </style>
 </head>
 <body>
-<div class="box">
-  <div class="brand">
-    <div class="club">I LOVE ENGLISH CLUB</div>
-    <div class="teacher">Ms. Gia Hân • English Teacher</div>
-    <div class="subtitle">Student Progress Report</div>
-  </div>
+<div class="app">
+<aside class="sidebar">
+  <div class="logo"><strong>I LOVE ENGLISH CLUB</strong><span>TEACHER REPORT SYSTEM</span></div>
+  <nav class="nav">
+    <button class="active" onclick="showPage('dashboard',this)">🏠 Dashboard</button>
+    <button onclick="showPage('create',this)">📝 Nhập điểm & nhận xét</button>
+    <button onclick="showPage('students',this)">👩‍🎓 Học sinh</button>
+    <button onclick="showPage('history',this)">📚 Lịch sử báo cáo</button>
+  </nav>
+</aside>
 
-  <div class="form">
-    <div class="field">
-      <label>HỌC SINH</label>
-      <input id="name" placeholder="Ví dụ: Nguyễn Minh Khôi">
-    </div>
-    <div class="field">
-      <label>LỚP</label>
-      <input id="className" placeholder="Ví dụ: Flyers 1">
-    </div>
-    <div class="field">
-      <label>NGÀY</label>
-      <input id="date" type="date">
-    </div>
-    <div class="field">
-      <label>BÀI HỌC</label>
-      <input id="lesson" placeholder="Ví dụ: Unit 3 – Vocabulary">
-    </div>
-    <div class="field full">
-      <label>NHẬN XÉT</label>
-      <textarea id="comment" rows="5" placeholder="Nhập nhận xét dành cho phụ huynh..."></textarea>
-    </div>
+<main class="main">
+<section id="dashboard">
+  <div class="top"><div><h1>Teacher Dashboard</h1><div class="sub">I Love English Club • Ms. Gia Hân</div></div><button class="btn primary" onclick="showPage('create')">＋ Tạo báo cáo</button></div>
+  <div class="stats">
+    <div class="stat"><small>Học sinh</small><b id="statStudents">0</b></div>
+    <div class="stat"><small>Báo cáo</small><b id="statReports">0</b></div>
+    <div class="stat"><small>Điểm trung bình</small><b id="statAvg">—</b></div>
+    <div class="stat"><small>Xuất sắc ≥ 9</small><b id="statExcellent">0</b></div>
   </div>
+  <div class="panel"><h2>Báo cáo gần đây</h2><div style="overflow:auto"><table class="simple"><thead><tr><th>Học sinh</th><th>Ngày</th><th>Lesson</th><th>Overall</th><th></th></tr></thead><tbody id="recent"></tbody></table></div></div>
+</section>
 
-  <div class="buttons">
-    <button class="primary" onclick="createReport()">✨ Tạo phiếu</button>
-    <button class="secondary" onclick="printReport()">🖨️ Xuất PDF</button>
-  </div>
-
-  <div class="report">
-    <div class="report-top"></div>
-    <div class="report-inner">
-      <div class="report-head">
-        <div class="eyebrow">I LOVE ENGLISH CLUB</div>
-        <h2>STUDENT PROGRESS REPORT</h2>
-        <div class="student" id="rName">Student</div>
+<section id="create" class="hidden">
+  <div class="top"><div><h1 id="formTitle">Tạo báo cáo</h1><div class="sub">Nhập điểm 5 kỹ năng → tạo nhận xét nhanh → xuất PDF A4</div></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn light" onclick="preview()">👁 Xem phiếu</button><button class="btn pink" onclick="printPDF()">🖨 Xuất PDF</button><button class="btn primary" onclick="saveReport()">💾 Lưu</button></div></div>
+  <div class="grid2">
+    <div class="panel">
+      <h2>📌 Thông tin buổi học</h2>
+      <div class="form">
+        <div class="field"><label>HỌC SINH</label><select id="student" onchange="syncClass()"></select></div>
+        <div class="field"><label>NGÀY</label><input id="date" type="date"></div>
+        <div class="field full"><label>LỚP</label><input id="className" placeholder="Flyers 1"></div>
+        <div class="field full"><label>BÀI HỌC / CHỦ ĐỀ</label><input id="lesson" placeholder="Unit 3 – Vocabulary"></div>
       </div>
+      <h2 style="margin-top:22px">⭐ Điểm 5 kỹ năng</h2>
+      <div id="skills"></div>
+      <div class="avg"><span>OVERALL SCORE</span><span id="average">0.0/10</span></div>
+    </div>
 
-      <div class="info">
-        <div><small>Class</small><b id="rClass">—</b></div>
-        <div><small>Date</small><b id="rDate">—</b></div>
-        <div><small>Lesson</small><b id="rLesson">—</b></div>
-      </div>
-
-      <div class="section-title">Teacher's Feedback</div>
-      <div class="feedback" id="rComment">Chưa có nhận xét.</div>
-
-      <div class="signature">
-        I Love English Club<br>
-        <b>Ms. Gia Hân</b><br>
-        English Teacher
-      </div>
+    <div class="panel">
+      <h2>💬 Nhận xét nhanh</h2>
+      <div style="font-size:12px;color:#7a8492;margin-bottom:10px">Chọn câu nhận xét. Bạn cũng có thể thêm nhận xét riêng.</div>
+      <div class="chips" id="chips"></div>
+      <div class="field" style="margin-top:14px"><label>NHẬN XÉT RIÊNG</label><textarea id="extra" rows="5" placeholder="Ví dụ: Con đã tiến bộ rõ rệt trong buổi học hôm nay..."></textarea></div>
+      <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap"><button class="btn primary" onclick="autoComment()">✨ Tự động theo điểm</button><button class="btn light" onclick="clearComment()">Xóa</button></div>
     </div>
   </div>
+  <div class="preview panel"><h2>📄 Xem trước phiếu phụ huynh</h2><div id="preview"></div></div>
+</section>
+
+<section id="students" class="hidden">
+  <div class="top"><div><h1>Học sinh</h1><div class="sub">Danh sách học sinh</div></div></div>
+  <div class="grid2">
+    <div class="panel"><h2>＋ Thêm học sinh</h2><div class="form"><div class="field"><label>Tên</label><input id="newName"></div><div class="field"><label>Lớp</label><input id="newClass"></div></div><button class="btn primary" style="margin-top:12px" onclick="addStudent()">Thêm</button></div>
+    <div class="panel"><h2>🔎 Tìm kiếm</h2><input id="search" placeholder="Tên hoặc lớp..." oninput="renderStudents()"></div>
+  </div>
+  <div class="panel" style="margin-top:18px"><div style="overflow:auto"><table class="simple"><thead><tr><th>Học sinh</th><th>Lớp</th><th>Báo cáo</th><th>Điểm TB</th><th></th></tr></thead><tbody id="studentTable"></tbody></table></div></div>
+</section>
+
+<section id="history" class="hidden">
+  <div class="top"><div><h1>Lịch sử báo cáo</h1><div class="sub">Các phiếu đã lưu trên thiết bị này</div></div><button class="btn danger" onclick="clearAllReports()">Xóa toàn bộ</button></div>
+  <div class="panel"><div style="overflow:auto"><table class="simple"><thead><tr><th>Học sinh</th><th>Ngày</th><th>Lesson</th><th>Overall</th><th></th></tr></thead><tbody id="historyTable"></tbody></table></div></div>
+</section>
+</main>
 </div>
 
-<div class="print-page">
-  <div class="report">
-    <div class="report-top"></div>
-    <div class="report-inner">
-      <div class="report-head">
-        <div class="eyebrow">I LOVE ENGLISH CLUB</div>
-        <h2>STUDENT PROGRESS REPORT</h2>
-        <div class="student" id="pName">Student</div>
-      </div>
-      <div class="info">
-        <div><small>Class</small><b id="pClass">—</b></div>
-        <div><small>Date</small><b id="pDate">—</b></div>
-        <div><small>Lesson</small><b id="pLesson">—</b></div>
-      </div>
-      <div class="section-title">Teacher's Feedback</div>
-      <div class="feedback" id="pComment">Chưa có nhận xét.</div>
-      <div class="signature">
-        I Love English Club<br>
-        <b>Ms. Gia Hân</b><br>
-        English Teacher
-      </div>
-    </div>
+<div id="toast" class="toast"></div>
+
+<!-- PDF ONLY -->
+<div id="pdfPage" class="pdf-page">
+ <div class="pdf-sheet">
+  <div class="pdf-band"></div>
+  <div class="pdf-inner">
+   <div class="pdf-brand">
+    <div class="eyebrow">I LOVE ENGLISH CLUB</div>
+    <h1>STUDENT PROGRESS REPORT</h1>
+    <div class="teacher">Ms. Gia Hân • English Teacher</div>
+   </div>
+   <div class="pdf-info">
+    <div class="pdf-info-box"><small>Student</small><b id="pName">—</b></div>
+    <div class="pdf-info-box"><small>Class</small><b id="pClass">—</b></div>
+    <div class="pdf-info-box"><small>Date</small><b id="pDate">—</b></div>
+   </div>
+   <div class="pdf-lesson"><b>Lesson:</b> <span id="pLesson">—</span></div>
+   <div class="pdf-title">Assessment</div>
+   <table class="pdf-table"><thead><tr><th>Learning Area</th><th>Score</th></tr></thead><tbody id="pScores"></tbody></table>
+   <div class="pdf-overall"><div><small>Overall Performance</small><div style="font-size:8pt;color:#718096;margin-top:1mm">Keep learning and growing!</div></div><b id="pAverage">0.0/10</b></div>
+   <div class="pdf-title">Teacher's Feedback</div>
+   <div class="pdf-feedback" id="pComment">—</div>
+   <div class="pdf-sign">I Love English Club<br><b>Ms. Gia Hân</b><br>English Teacher</div>
   </div>
+  <div class="pdf-footer"><span>Thank you for supporting your child's learning journey.</span><span>Ms. Gia Hân • I Love English Club</span></div>
+ </div>
 </div>
 
 <script>
-const dateInput=document.getElementById('date');
-dateInput.value=new Date().toISOString().slice(0,10);
+const skillNames=["Vocabulary","Grammar","Listening","Speaking","Writing"];
+const commentBank=[
+ ["Vocabulary tốt","Con nhớ và sử dụng từ vựng khá tốt."],
+ ["Ôn từ vựng","Con cần ôn lại từ vựng cũ thường xuyên hơn."],
+ ["Grammar tốt","Con nắm khá chắc kiến thức ngữ pháp."],
+ ["Ôn ngữ pháp","Con cần luyện thêm một số điểm ngữ pháp."],
+ ["Listening tốt","Con có khả năng nghe hiểu khá tốt."],
+ ["Speaking tốt","Con nói khá tự tin trong buổi học."],
+ ["Speaking tự tin","Con cần mạnh dạn hơn khi giao tiếp bằng tiếng Anh."],
+ ["Writing tốt","Con hoàn thành phần viết khá tốt."],
+ ["Phát âm","Con phát âm khá rõ và dễ hiểu."],
+ ["Tập trung","Con cần tập trung hơn trong giờ học."],
+ ["Tiến bộ","Cô ghi nhận sự tiến bộ của con so với những buổi học trước."],
+ ["Thái độ tốt","Con có thái độ học tập tích cực và nghiêm túc."],
+ ["Cố gắng","Cô ghi nhận sự cố gắng của con trong buổi học hôm nay."]
+];
+let students=JSON.parse(localStorage.getItem("ILEC_students")||"null")||[];
+let reports=JSON.parse(localStorage.getItem("ILEC_reports")||"[]");
+let selected=new Set(),editingId=null;
 
-function values(){
-  const name=document.getElementById('name').value.trim()||'Student';
-  const cls=document.getElementById('className').value.trim()||'—';
-  const lesson=document.getElementById('lesson').value.trim()||'—';
-  const date=document.getElementById('date').value;
-  const comment=document.getElementById('comment').value.trim()||'Chưa có nhận xét.';
-  let d='—';
-  if(date){const [y,m,day]=date.split('-');d=day+'/'+m+'/'+y}
-  return {name,cls,lesson,date:d,comment};
+function saveData(){localStorage.setItem("ILEC_students",JSON.stringify(students));localStorage.setItem("ILEC_reports",JSON.stringify(reports))}
+function today(){return new Date().toISOString().slice(0,10)}
+function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+function dateVN(x){if(!x)return"—";let a=x.split("-");return a[2]+"/"+a[1]+"/"+a[0]}
+function showPage(id,btn){
+ ["dashboard","create","students","history"].forEach(x=>document.getElementById(x).classList.toggle("hidden",x!==id));
+ document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("active"));if(btn)btn.classList.add("active");
+ if(id==="dashboard")renderDashboard();if(id==="create"){populateStudents();renderSkills();renderChips();renderPreview()}
+ if(id==="students")renderStudents();if(id==="history")renderHistory();window.scrollTo(0,0)
 }
-function createReport(){
-  const r=values();
-  document.getElementById('rName').textContent=r.name;
-  document.getElementById('rClass').textContent=r.cls;
-  document.getElementById('rDate').textContent=r.date;
-  document.getElementById('rLesson').textContent=r.lesson;
-  document.getElementById('rComment').textContent=r.comment;
-  document.getElementById('pName').textContent=r.name;
-  document.getElementById('pClass').textContent=r.cls;
-  document.getElementById('pDate').textContent=r.date;
-  document.getElementById('pLesson').textContent=r.lesson;
-  document.getElementById('pComment').textContent=r.comment;
+function populateStudents(){
+ const s=document.getElementById("student"),old=s.value;
+ s.innerHTML=students.length?students.map(x=>`<option value="${x.id}">${esc(x.name)}${x.className?" — "+esc(x.className):""}</option>`).join(""):`<option value="">-- Thêm học sinh trước --</option>`;
+ if(old)s.value=old;
 }
-function printReport(){
-  createReport();
-  window.print();
+function syncClass(){let s=students.find(x=>String(x.id)===document.getElementById("student").value);if(s)document.getElementById("className").value=s.className||"";renderPreview()}
+function renderSkills(){
+ let values=[...document.querySelectorAll(".scoreInput")].map(x=>x.value);
+ document.getElementById("skills").innerHTML=skillNames.map((s,i)=>`<div class="skill"><div class="skill-name">${s}</div><input class="scoreInput" type="number" min="0" max="10" step=".5" value="${values[i]??8}" oninput="scoreChanged()"></div>`).join("");
+ scoreChanged();
 }
-createReport();
+function scores(){return [...document.querySelectorAll(".scoreInput")].map(x=>Math.max(0,Math.min(10,Number(x.value)||0)))}
+function scoreChanged(){let a=scores(),avg=a.reduce((x,y)=>x+y,0)/5;document.getElementById("average").textContent=avg.toFixed(1)+"/10";renderPreview()}
+function renderChips(){document.getElementById("chips").innerHTML=commentBank.map((c,i)=>`<button class="chip ${selected.has(i)?"on":""}" onclick="toggleChip(${i})">${esc(c[1])}</button>`).join("")}
+function toggleChip(i){selected.has(i)?selected.delete(i):selected.add(i);renderChips();renderPreview()}
+function clearComment(){selected.clear();document.getElementById("extra").value="";renderChips();renderPreview()}
+function autoComment(){
+ let s=scores(),pick=[];
+ if(s[0]>=8)pick.push("Vocabulary tốt");else if(s[0]<7)pick.push("Ôn từ vựng");
+ if(s[1]>=8)pick.push("Grammar tốt");else if(s[1]<7)pick.push("Ôn ngữ pháp");
+ if(s[2]>=8)pick.push("Listening tốt");
+ if(s[3]>=8)pick.push("Speaking tốt");else if(s[3]<7)pick.push("Speaking tự tin");
+ if(s[4]>=8)pick.push("Writing tốt");
+ let avg=s.reduce((a,b)=>a+b,0)/5;
+ if(avg>=8)pick.push("Tiến bộ");if(avg>=9)pick.push("Thái độ tốt");if(avg<8)pick.push("Cố gắng");
+ selected=new Set(pick.map(t=>commentBank.findIndex(c=>c[0]===t)).filter(i=>i>=0));
+ renderChips();renderPreview();toast("Đã tạo nhận xét tự động ✨");
+}
+function current(){
+ let st=students.find(x=>String(x.id)===document.getElementById("student").value),s=scores(),avg=s.reduce((a,b)=>a+b,0)/5;
+ let extra=document.getElementById("extra").value.trim();
+ let comments=[...selected].sort((a,b)=>a-b).map(i=>commentBank[i][1]);if(extra)comments.push(extra);
+ return {studentId:st?.id||"",name:st?.name||"Student",className:document.getElementById("className").value.trim()||st?.className||"—",date:document.getElementById("date").value||today(),lesson:document.getElementById("lesson").value.trim()||"—",scores:s,average:avg,comment:comments.join(" ")||"Chưa có nhận xét."};
+}
+function reportHTML(r){
+ return `<div class="report"><div class="report-band"></div><div class="report-body">
+ <div class="report-head"><div class="eyebrow">I LOVE ENGLISH CLUB</div><h2>STUDENT PROGRESS REPORT</h2><div class="report-teacher">Ms. Gia Hân • English Teacher</div></div>
+ <div class="info"><div class="info-box"><small>Student</small><b>${esc(r.name)}</b></div><div class="info-box"><small>Class</small><b>${esc(r.className)}</b></div><div class="info-box"><small>Date</small><b>${dateVN(r.date)}</b></div></div>
+ <div class="lesson"><b>Lesson:</b> ${esc(r.lesson)}</div>
+ <div class="section-title">Assessment</div>
+ <table class="report-table"><thead><tr><th>Learning Area</th><th>Score</th></tr></thead><tbody>${skillNames.map((s,i)=>`<tr><td>${s}</td><td>${r.scores[i].toFixed(1)}/10</td></tr>`).join("")}</tbody></table>
+ <div class="overall"><div><b style="font-size:12px;color:#328b9c">OVERALL PERFORMANCE</b><div style="font-size:10px;color:#718096">Keep learning and growing!</div></div><b>${r.average.toFixed(1)}/10</b></div>
+ <div class="section-title">Teacher's Feedback</div><div class="feedback">${esc(r.comment)}</div>
+ <div class="signature">I Love English Club<br><b>Ms. Gia Hân</b><br>English Teacher</div>
+ </div></div>`
+}
+function renderPreview(){document.getElementById("preview").innerHTML=reportHTML(current())}
+function fillPDF(r){
+ document.getElementById("pName").textContent=r.name;document.getElementById("pClass").textContent=r.className;document.getElementById("pDate").textContent=dateVN(r.date);document.getElementById("pLesson").textContent=r.lesson;document.getElementById("pAverage").textContent=r.average.toFixed(1)+"/10";document.getElementById("pComment").textContent=r.comment;
+ document.getElementById("pScores").innerHTML=skillNames.map((s,i)=>`<tr><td>${s}</td><td>${r.scores[i].toFixed(1)}/10</td></tr>`).join("");
+}
+function printPDF(){let r=current();if(!students.length)return alert("Vui lòng thêm học sinh trước.");fillPDF(r);window.print()}
+function saveReport(){
+ let r=current();if(!r.studentId)return alert("Vui lòng chọn học sinh.");
+ if(editingId){let i=reports.findIndex(x=>x.id===editingId);if(i>=0)reports[i]={...r,id:editingId}}
+ else reports.unshift({...r,id:Date.now()});
+ editingId=null;saveData();toast("Đã lưu báo cáo 💗");renderDashboard();renderHistory();
+}
+function editReport(id){
+ let r=reports.find(x=>x.id===id);if(!r)return;editingId=id;showPage("create");document.getElementById("student").value=r.studentId;document.getElementById("className").value=r.className;document.getElementById("date").value=r.date;document.getElementById("lesson").value=r.lesson;renderSkills();document.querySelectorAll(".scoreInput").forEach((x,i)=>x.value=r.scores[i]);selected=new Set();document.getElementById("extra").value=r.comment;document.getElementById("formTitle").textContent="Chỉnh sửa báo cáo";scoreChanged()
+}
+function renderDashboard(){
+ document.getElementById("statStudents").textContent=students.length;document.getElementById("statReports").textContent=reports.length;
+ let avg=reports.length?reports.reduce((a,b)=>a+b.average,0)/reports.length:0;document.getElementById("statAvg").textContent=reports.length?avg.toFixed(1):"—";document.getElementById("statExcellent").textContent=reports.filter(r=>r.average>=9).length;
+ document.getElementById("recent").innerHTML=reports.slice(0,8).map(r=>`<tr><td><b>${esc(r.name)}</b></td><td>${dateVN(r.date)}</td><td>${esc(r.lesson)}</td><td><span class="badge">${r.average.toFixed(1)}/10</span></td><td><button class="btn light" onclick="editReport(${r.id})">Xem</button></td></tr>`).join("")||`<tr><td colspan="5" style="text-align:center;color:#999;padding:25px">Chưa có báo cáo.</td></tr>`
+}
+function addStudent(){let n=document.getElementById("newName").value.trim(),c=document.getElementById("newClass").value.trim();if(!n)return alert("Nhập tên học sinh.");students.push({id:Date.now(),name:n,className:c});saveData();document.getElementById("newName").value="";document.getElementById("newClass").value="";renderStudents();populateStudents();renderDashboard();toast("Đã thêm học sinh")}
+function renderStudents(){
+ let q=(document.getElementById("search").value||"").toLowerCase();let list=students.filter(s=>s.name.toLowerCase().includes(q)||s.className.toLowerCase().includes(q));
+ document.getElementById("studentTable").innerHTML=list.map(s=>{let rr=reports.filter(r=>r.studentId===s.id),av=rr.length?rr.reduce((a,b)=>a+b.average,0)/rr.length:0;return `<tr><td><b>${esc(s.name)}</b></td><td>${esc(s.className||"—")}</td><td>${rr.length}</td><td>${rr.length?av.toFixed(1):"—"}</td><td><button class="btn danger" onclick="removeStudent(${s.id})">Xóa</button></td></tr>`}).join("")||`<tr><td colspan="5" style="text-align:center;color:#999;padding:25px">Chưa có học sinh.</td></tr>`
+}
+function removeStudent(id){if(confirm("Xóa học sinh này?")){students=students.filter(s=>s.id!==id);saveData();renderStudents();populateStudents();renderDashboard()}}
+function renderHistory(){document.getElementById("historyTable").innerHTML=reports.map(r=>`<tr><td><b>${esc(r.name)}</b></td><td>${dateVN(r.date)}</td><td>${esc(r.lesson)}</td><td><span class="badge">${r.average.toFixed(1)}/10</span></td><td><button class="btn light" onclick="editReport(${r.id})">Chỉnh sửa</button></td></tr>`).join("")||`<tr><td colspan="5" style="text-align:center;color:#999;padding:25px">Chưa có báo cáo.</td></tr>`}
+function clearAllReports(){if(confirm("Xóa toàn bộ báo cáo?")){reports=[];saveData();renderHistory();renderDashboard();toast("Đã xóa lịch sử")}}
+function preview(){document.getElementById("preview").scrollIntoView({behavior:"smooth"});renderPreview()}
+function toast(t){let x=document.getElementById("toast");x.textContent=t;x.classList.add("show");setTimeout(()=>x.classList.remove("show"),2200)}
+document.getElementById("date").value=today();document.getElementById("extra").addEventListener("input",renderPreview);populateStudents();renderSkills();renderChips();renderPreview();renderDashboard();renderHistory();renderStudents();
 </script>
 </body>
-</html>
-"""
+</html>'''
 
 path=Path("/mnt/data/index.html")
-path.write_text(html,encoding="utf-8")
+path.write_text(html, encoding="utf-8")
 print(path)
