@@ -188,7 +188,7 @@ table.simple{width:100%;border-collapse:collapse}table.simple th,table.simple td
 
 <main class="main">
 <section id="dashboard">
-  <div class="top"><div><h1>Teacher Dashboard</h1><div class="sub">I Love English Club • Ms. Gia Hân <span id="firebaseStatus" style="display:inline-block;margin-left:8px;padding:4px 8px;border-radius:999px;background:#fff8e8;color:#a06b00;font-weight:800;font-size:11px">☁ Đang kết nối...</span></div></div><button class="btn primary" onclick="showPage('create')">＋ Tạo báo cáo</button></div>
+  <div class="top"><div><h1>Teacher Dashboard</h1><div class="sub">I Love English Club • Ms. Gia Hân <span id="firebaseStatus" style="display:inline-block;margin-left:8px;padding:4px 8px;border-radius:999px;background:#fff8e8;color:#a06b00;font-weight:800;font-size:11px">☁ Firestore: đang kết nối...</span></div></div><button class="btn primary" onclick="showPage('create')">＋ Tạo báo cáo</button></div>
   <div class="stats">
     <div class="stat"><small>Học sinh</small><b id="statStudents">0</b></div>
     <div class="stat"><small>Báo cáo</small><b id="statReports">0</b></div>
@@ -310,7 +310,7 @@ table.simple{width:100%;border-collapse:collapse}table.simple th,table.simple td
       </div>
       <button class="btn light" onclick="resetHistoryFilters()">↺ Xóa bộ lọc</button>
     </div>
-    <div class="filter-note" id="historySummary">Đang hiển thị tất cả báo cáo.</div>
+    <div class="filter-note" id="historySummary">Đang hiển thị tất cả báo cáo.</div><div class="filter-note" style="margin-top:8px">Dữ liệu được lưu trong Cloud Firestore của project report-35066.</div>
   </div>
 
   <div class="panel" style="margin-top:18px">
@@ -380,100 +380,136 @@ table.simple{width:100%;border-collapse:collapse}table.simple th,table.simple td
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
   import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-analytics.js";
-  import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
+  import {
+    getFirestore, collection, getDocs, doc, setDoc, deleteDoc,
+    writeBatch
+  } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
   const firebaseConfig = {
-    apiKey: "AIzaSyCwU4RcKdEUxarn90pdrin4XVo1DeXRmEc",
-    authDomain: "student-mangenent.firebaseapp.com",
-    databaseURL: "https://student-mangenent-default-rtdb.firebaseio.com",
-    projectId: "student-mangenent",
-    storageBucket: "student-mangenent.firebasestorage.app",
-    messagingSenderId: "556588294302",
-    appId: "1:556588294302:web:48ac486b8037d182219b8f",
-    measurementId: "G-SMYXC6H4Q7"
+    apiKey: "AIzaSyDroSvSL4fJxgd7ZWQevMjLaBWBLVljFOA",
+    authDomain: "report-35066.firebaseapp.com",
+    projectId: "report-35066",
+    storageBucket: "report-35066.firebasestorage.app",
+    messagingSenderId: "456236091443",
+    appId: "1:456236091443:web:b5bbbd33ac35b387e63b46",
+    measurementId: "G-QM9CE7SBP9"
   };
 
   const app = initializeApp(firebaseConfig);
   try { getAnalytics(app); } catch (e) { console.warn("Firebase Analytics không khả dụng:", e); }
-  const db = getDatabase(app);
+  const db = getFirestore(app);
 
-  const CLOUD_STATE_KEY = "ILEC_cloud_initialized";
+  const CLOUD_STATE_KEY = "ILEC_firestore_initialized";
   let syncTimer = null;
   let cloudReady = false;
 
-  function asMap(list){
-    const out = {};
-    for(const item of (Array.isArray(list) ? list : [])){
-      if(item && item.id != null) out[String(item.id)] = item;
-    }
-    return out;
+  function cleanItem(item){
+    const copy={...(item||{})};
+    delete copy.__typename;
+    return copy;
   }
 
-  function asList(value){
-    if(!value) return [];
-    return Object.values(value);
+  function keyOf(item){ return String(item?.id ?? ""); }
+
+  async function readCollection(name){
+    const snap = await getDocs(collection(db,name));
+    return snap.docs.map(d=>({id:d.id,...d.data()}));
+  }
+
+  async function writeAll(name, list){
+    const col = collection(db,name);
+    const existing = await getDocs(col);
+    const nextIds = new Set((Array.isArray(list)?list:[]).map(keyOf).filter(Boolean));
+    let ops=[];
+
+    existing.docs.forEach(d=>{
+      if(!nextIds.has(String(d.id))) ops.push({type:"delete", ref:d.ref});
+    });
+    (Array.isArray(list)?list:[]).forEach(item=>{
+      const id=keyOf(item);
+      if(!id) return;
+      ops.push({type:"set", ref:doc(db,name,id), data:cleanItem(item)});
+    });
+
+    for(let i=0;i<ops.length;i+=450){
+      const batch=writeBatch(db);
+      for(const op of ops.slice(i,i+450)){
+        if(op.type==="delete") batch.delete(op.ref);
+        else batch.set(op.ref,op.data,{merge:false});
+      }
+      await batch.commit();
+    }
   }
 
   async function readCloud(){
-    const [studentsSnap, reportsSnap] = await Promise.all([
-      get(ref(db, "students")),
-      get(ref(db, "reports"))
+    const [cloudStudents, cloudReports] = await Promise.all([
+      readCollection("students"),
+      readCollection("reports")
     ]);
 
-    const hasStudents = studentsSnap.exists();
-    const hasReports = reportsSnap.exists();
     const localStudents = JSON.parse(localStorage.getItem("ILEC_students") || "null") || [];
-    const localReports = JSON.parse(localStorage.getItem("ILEC_reports") || "[]");
+    const localReports = JSON.parse(localStorage.getItem("ILEC_reports") || "[]") || [];
+    const migratedCollections=[];
 
-    // Lần đầu: nếu Firebase trống thì đưa dữ liệu localStorage hiện có lên cloud.
-    if(!hasStudents && !hasReports && (localStudents.length || localReports.length)){
-      await Promise.all([
-        set(ref(db, "students"), asMap(localStudents)),
-        set(ref(db, "reports"), asMap(localReports))
-      ]);
-      return { students: localStudents, reports: localReports, migrated: true };
+    if(!cloudStudents.length && localStudents.length){
+      await writeAll("students",localStudents);
+      migratedCollections.push("students");
+    }
+    if(!cloudReports.length && localReports.length){
+      await writeAll("reports",localReports);
+      migratedCollections.push("reports");
     }
 
     return {
-      students: hasStudents ? asList(studentsSnap.val()) : [],
-      reports: hasReports ? asList(reportsSnap.val()) : []
+      students: cloudStudents.length ? cloudStudents : localStudents,
+      reports: cloudReports.length ? cloudReports : localReports,
+      migrated: migratedCollections.length>0
     };
   }
 
-  async function syncNow(students, reports){
+  async function syncNow(students,reports){
     if(!cloudReady) return;
     await Promise.all([
-      set(ref(db, "students"), asMap(students)),
-      set(ref(db, "reports"), asMap(reports))
+      writeAll("students",students),
+      writeAll("reports",reports)
     ]);
-    localStorage.setItem(CLOUD_STATE_KEY, "1");
-    window.dispatchEvent(new CustomEvent("firebase-status", { detail: { online: true } }));
+    localStorage.setItem(CLOUD_STATE_KEY,"1");
+    window.dispatchEvent(new CustomEvent("firebase-status",{detail:{online:true}}));
   }
 
-  function queueSync(students, reports){
+  function queueSync(students,reports){
     clearTimeout(syncTimer);
-    syncTimer = setTimeout(async () => {
-      try {
-        await syncNow(students, reports);
-      } catch (error) {
-        console.error("Không thể đồng bộ Firebase:", error);
-        window.dispatchEvent(new CustomEvent("firebase-status", { detail: { online: false, error } }));
+    syncTimer=setTimeout(async()=>{
+      try{ await syncNow(students,reports); }
+      catch(error){
+        console.error("Không thể đồng bộ Cloud Firestore:",error);
+        window.dispatchEvent(new CustomEvent("firebase-status",{detail:{online:false,error}}));
       }
-    }, 250);
+    },300);
+  }
+
+  async function deleteItem(collectionName,id){
+    if(!cloudReady || id==null) return;
+    try{
+      await deleteDoc(doc(db,collectionName,String(id)));
+    }catch(error){
+      console.error("Không thể xóa dữ liệu Firestore:",error);
+      window.dispatchEvent(new CustomEvent("firebase-status",{detail:{online:false,error}}));
+    }
   }
 
   async function initCloud(){
-    try {
-      const cloud = await readCloud();
-      cloudReady = true;
-      window.ILEC_Firebase = { db, queueSync, syncNow, cloudReady: true };
-      window.dispatchEvent(new CustomEvent("firebase-data-loaded", { detail: cloud }));
-      window.dispatchEvent(new CustomEvent("firebase-status", { detail: { online: true } }));
-    } catch (error) {
-      console.error("Firebase khởi tạo thất bại:", error);
-      cloudReady = false;
-      window.ILEC_Firebase = { db, queueSync, syncNow, cloudReady: false };
-      window.dispatchEvent(new CustomEvent("firebase-status", { detail: { online: false, error } }));
+    try{
+      const cloud=await readCloud();
+      cloudReady=true;
+      window.ILEC_Firebase={db,queueSync,syncNow,deleteItem,cloudReady:true};
+      window.dispatchEvent(new CustomEvent("firebase-data-loaded",{detail:cloud}));
+      window.dispatchEvent(new CustomEvent("firebase-status",{detail:{online:true}}));
+    }catch(error){
+      console.error("Cloud Firestore khởi tạo thất bại:",error);
+      cloudReady=false;
+      window.ILEC_Firebase={db,queueSync,syncNow,deleteItem,cloudReady:false};
+      window.dispatchEvent(new CustomEvent("firebase-status",{detail:{online:false,error}}));
     }
   }
 
@@ -751,7 +787,9 @@ function deleteReport(id){
  if(!r)return;
  if(confirm(`Xóa báo cáo của ${r.name} ngày ${dateVN(r.date)}?`)){
    reports=reports.filter(x=>String(x.id)!==String(id));
-   saveData(); renderHistory(); renderDashboard(); renderStudents();
+   saveData();
+   window.ILEC_Firebase?.deleteItem?.("reports",id);
+   renderHistory(); renderDashboard(); renderStudents();
    toast("Đã xóa báo cáo");
  }
 }
@@ -815,7 +853,9 @@ function removeStudent(id){
    : `Xóa học sinh ${st.name}?`;
  if(confirm(msg)){
    students=students.filter(s=>String(s.id)!==String(id));
-   saveData();populateStudents();populateClassControls();renderStudents();renderHistory();renderDashboard();
+   saveData();
+   window.ILEC_Firebase?.deleteItem?.("students",id);
+   populateStudents();populateClassControls();renderStudents();renderHistory();renderDashboard();
    toast("Đã xóa học sinh; lịch sử báo cáo vẫn được giữ.");
  }
 }
