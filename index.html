@@ -1,6 +1,4 @@
-from pathlib import Path
-
-html = r'''<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
@@ -67,6 +65,25 @@ table.simple{width:100%;border-collapse:collapse}table.simple th,table.simple td
   .pdf-sign{text-align:right;margin-top:8mm;color:#7c8795;font-size:8pt}.pdf-sign b{color:#d85f86;font-size:10pt}
   .pdf-footer{position:absolute;left:17mm;right:17mm;bottom:7mm;border-top:1px solid #e4edf0;padding-top:3mm;display:flex;justify-content:space-between;font-size:7pt;color:#7c8795}
 }
+
+.metric-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:14px}
+.metric-card{background:#fbfcfd;border:1px solid var(--line);border-radius:13px;padding:12px}
+.metric-card .metric-top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.metric-card small{color:var(--muted);font-weight:800}
+.metric-card b{font-size:20px;color:var(--pink)}
+.progress-wrap{margin-top:8px;height:7px;border-radius:99px;background:#edf2f4;overflow:hidden}
+.progress-bar{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--blue),var(--pink));transition:width .25s}
+.feedback-box{background:linear-gradient(120deg,#f2fbfd,#fff4f8);border:1px solid #e8eef1;border-radius:14px;padding:15px;font-size:12px;line-height:1.75;color:#4f5b6b}
+.feedback-box strong{color:#328b9c}
+.goal-list{display:grid;gap:7px;margin-top:10px}
+.goal-item{padding:9px 11px;background:#fff;border:1px solid var(--line);border-radius:10px;color:#596273}
+.tone-note{font-size:11px;color:#7a8492;margin-top:6px}
+.report-metrics{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.report-metric{padding:11px 12px;border-radius:11px;background:#fbfcfd;border:1px solid var(--line)}
+.report-metric small{display:block;color:#788596;font-size:9px;text-transform:uppercase;font-weight:900}
+.report-metric b{display:block;margin-top:4px;color:var(--pink);font-size:16px}
+@media(max-width:650px){.metric-grid,.report-metrics{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
@@ -87,14 +104,14 @@ table.simple{width:100%;border-collapse:collapse}table.simple th,table.simple td
   <div class="stats">
     <div class="stat"><small>Học sinh</small><b id="statStudents">0</b></div>
     <div class="stat"><small>Báo cáo</small><b id="statReports">0</b></div>
-    <div class="stat"><small>Điểm trung bình</small><b id="statAvg">—</b></div>
-    <div class="stat"><small>Xuất sắc ≥ 9</small><b id="statExcellent">0</b></div>
+    <div class="stat"><small>Điểm kỹ năng TB</small><b id="statAvg">—</b></div>
+    <div class="stat"><small>Chuyên cần TB</small><b id="statAttendance">—</b></div>
   </div>
   <div class="panel"><h2>Báo cáo gần đây</h2><div style="overflow:auto"><table class="simple"><thead><tr><th>Học sinh</th><th>Ngày</th><th>Lesson</th><th>Overall</th><th></th></tr></thead><tbody id="recent"></tbody></table></div></div>
 </section>
 
 <section id="create" class="hidden">
-  <div class="top"><div><h1 id="formTitle">Tạo báo cáo</h1><div class="sub">Nhập điểm 5 kỹ năng → tạo nhận xét nhanh → xuất PDF A4</div></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn light" onclick="preview()">👁 Xem phiếu</button><button class="btn pink" onclick="printPDF()">🖨 Xuất PDF</button><button class="btn primary" onclick="saveReport()">💾 Lưu</button></div></div>
+  <div class="top"><div><h1 id="formTitle">Tạo báo cáo</h1><div class="sub">Nhập 3 kỹ năng chính + thói quen học tập → tạo nhận xét tự động → xuất PDF A4</div></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn light" onclick="preview()">👁 Xem phiếu</button><button class="btn pink" onclick="printPDF()">🖨 Xuất PDF</button><button class="btn primary" onclick="saveReport()">💾 Lưu</button></div></div>
   <div class="grid2">
     <div class="panel">
       <h2>📌 Thông tin buổi học</h2>
@@ -104,17 +121,31 @@ table.simple{width:100%;border-collapse:collapse}table.simple th,table.simple td
         <div class="field full"><label>LỚP</label><input id="className" placeholder="Flyers 1"></div>
         <div class="field full"><label>BÀI HỌC / CHỦ ĐỀ</label><input id="lesson" placeholder="Unit 3 – Vocabulary"></div>
       </div>
-      <h2 style="margin-top:22px">⭐ Điểm 5 kỹ năng</h2>
+      <h2 style="margin-top:22px">⭐ Kết quả 3 kỹ năng</h2>
       <div id="skills"></div>
-      <div class="avg"><span>OVERALL SCORE</span><span id="average">0.0/10</span></div>
+      <div class="metric-grid">
+        <div class="metric-card">
+          <div class="metric-top"><small>📝 Hoàn thành bài tập</small><b id="homeworkPct">100%</b></div>
+          <input id="homework" type="number" min="0" max="100" step="5" value="100" oninput="studyHabitsChanged()">
+          <div class="progress-wrap"><div id="homeworkBar" class="progress-bar" style="width:100%"></div></div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-top"><small>📅 Chuyên cần</small><b id="attendancePct">100%</b></div>
+          <input id="attendance" type="number" min="0" max="100" step="5" value="100" oninput="studyHabitsChanged()">
+          <div class="progress-wrap"><div id="attendanceBar" class="progress-bar" style="width:100%"></div></div>
+        </div>
+      </div>
+      <div class="avg"><span>AVERAGE SKILL SCORE</span><span id="average">0.0/10</span></div>
     </div>
 
     <div class="panel">
-      <h2>💬 Nhận xét nhanh</h2>
-      <div style="font-size:12px;color:#7a8492;margin-bottom:10px">Chọn câu nhận xét. Bạn cũng có thể thêm nhận xét riêng.</div>
-      <div class="chips" id="chips"></div>
-      <div class="field" style="margin-top:14px"><label>NHẬN XÉT RIÊNG</label><textarea id="extra" rows="5" placeholder="Ví dụ: Con đã tiến bộ rõ rệt trong buổi học hôm nay..."></textarea></div>
-      <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap"><button class="btn primary" onclick="autoComment()">✨ Tự động theo điểm</button><button class="btn light" onclick="clearComment()">Xóa</button></div>
+      <h2>💬 Nhận xét học sinh</h2>
+      <div style="font-size:12px;color:#7a8492;margin-bottom:10px">Hệ thống tự kết hợp điểm số, bài tập và chuyên cần để tạo nhận xét tự nhiên hơn.</div>
+      <div class="feedback-box" id="autoFeedback">Chưa có nhận xét tự động.</div>
+      <div class="goal-list" id="goalList"></div>
+      <div class="tone-note">Bạn vẫn có thể thêm lời nhắn riêng của giáo viên.</div>
+      <div class="field" style="margin-top:14px"><label>NHẬN XÉT RIÊNG</label><textarea id="extra" rows="4" placeholder="Ví dụ: Cô rất vui vì con đã chủ động phát biểu nhiều hơn hôm nay..."></textarea></div>
+      <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap"><button class="btn primary" onclick="autoComment()">✨ Tạo nhận xét thông minh</button><button class="btn light" onclick="clearComment()">Xóa</button></div>
     </div>
   </div>
   <div class="preview panel"><h2>📄 Xem trước phiếu phụ huynh</h2><div id="preview"></div></div>
@@ -155,7 +186,7 @@ table.simple{width:100%;border-collapse:collapse}table.simple th,table.simple td
    </div>
    <div class="pdf-lesson"><b>Lesson:</b> <span id="pLesson">—</span></div>
    <div class="pdf-title">Assessment</div>
-   <table class="pdf-table"><thead><tr><th>Learning Area</th><th>Score</th></tr></thead><tbody id="pScores"></tbody></table>
+   <table class="pdf-table"><thead><tr><th>Learning Skill</th><th>Score</th></tr></thead><tbody id="pScores"></tbody></table><table class="pdf-table" style="margin-top:4mm"><thead><tr><th>Learning Habits</th><th>Status</th></tr></thead><tbody><tr><td>Homework Completion</td><td id="pHomework">100%</td></tr><tr><td>Attendance</td><td id="pAttendance">100%</td></tr></tbody></table>
    <div class="pdf-overall"><div><small>Overall Performance</small><div style="font-size:8pt;color:#718096;margin-top:1mm">Keep learning and growing!</div></div><b id="pAverage">0.0/10</b></div>
    <div class="pdf-title">Teacher's Feedback</div>
    <div class="pdf-feedback" id="pComment">—</div>
@@ -166,25 +197,27 @@ table.simple{width:100%;border-collapse:collapse}table.simple th,table.simple td
 </div>
 
 <script>
-const skillNames=["Vocabulary","Grammar","Listening","Speaking","Writing"];
+const skillNames=["Listening","Speaking","Reading & Writing"];
 const commentBank=[
- ["Vocabulary tốt","Con nhớ và sử dụng từ vựng khá tốt."],
- ["Ôn từ vựng","Con cần ôn lại từ vựng cũ thường xuyên hơn."],
- ["Grammar tốt","Con nắm khá chắc kiến thức ngữ pháp."],
- ["Ôn ngữ pháp","Con cần luyện thêm một số điểm ngữ pháp."],
- ["Listening tốt","Con có khả năng nghe hiểu khá tốt."],
- ["Speaking tốt","Con nói khá tự tin trong buổi học."],
- ["Speaking tự tin","Con cần mạnh dạn hơn khi giao tiếp bằng tiếng Anh."],
- ["Writing tốt","Con hoàn thành phần viết khá tốt."],
- ["Phát âm","Con phát âm khá rõ và dễ hiểu."],
- ["Tập trung","Con cần tập trung hơn trong giờ học."],
- ["Tiến bộ","Cô ghi nhận sự tiến bộ của con so với những buổi học trước."],
- ["Thái độ tốt","Con có thái độ học tập tích cực và nghiêm túc."],
- ["Cố gắng","Cô ghi nhận sự cố gắng của con trong buổi học hôm nay."]
+ ["Listening tốt","Em nghe hiểu khá tốt và có thể nắm được những ý chính của bài."],
+ ["Listening cần luyện","Em nên luyện nghe thường xuyên hơn để tăng khả năng bắt ý và phản xạ."],
+ ["Speaking tốt","Em giao tiếp khá tự tin và biết cách diễn đạt ý bằng tiếng Anh."],
+ ["Speaking cần luyện","Em nên mạnh dạn nói nhiều hơn và luyện trả lời thành câu đầy đủ."],
+ ["Reading & Writing tốt","Em đọc hiểu khá tốt và hoàn thành phần viết rõ ràng."],
+ ["Reading & Writing cần luyện","Em nên dành thêm thời gian đọc và kiểm tra lại câu viết."],
+ ["Bài tập tốt","Em có ý thức hoàn thành bài tập đầy đủ và khá đúng hạn."],
+ ["Bài tập cần cải thiện","Em cần duy trì thói quen hoàn thành bài tập đều đặn hơn."],
+ ["Chuyên cần tốt","Em tham gia lớp học đầy đủ và duy trì việc học ổn định."],
+ ["Chuyên cần cần cải thiện","Em nên cố gắng tham gia lớp học đều đặn hơn."],
+ ["Tiến bộ","Cô ghi nhận sự tiến bộ của em và tinh thần cố gắng trong thời gian qua."],
+ ["Tập trung","Em cần tập trung hơn trong một số hoạt động để phát huy tốt khả năng."],
+ ["Thái độ tích cực","Em có thái độ học tập tích cực và sẵn sàng tham gia các hoạt động."],
+ ["Động viên","Cô rất vui khi thấy em cố gắng. Hãy tiếp tục duy trì nhé! 🌷"]
 ];
+
 let students=JSON.parse(localStorage.getItem("ILEC_students")||"null")||[];
 let reports=JSON.parse(localStorage.getItem("ILEC_reports")||"[]");
-let selected=new Set(),editingId=null;
+let editingId=null;
 
 function saveData(){localStorage.setItem("ILEC_students",JSON.stringify(students));localStorage.setItem("ILEC_reports",JSON.stringify(reports))}
 function today(){return new Date().toISOString().slice(0,10)}
@@ -208,27 +241,56 @@ function renderSkills(){
  scoreChanged();
 }
 function scores(){return [...document.querySelectorAll(".scoreInput")].map(x=>Math.max(0,Math.min(10,Number(x.value)||0)))}
-function scoreChanged(){let a=scores(),avg=a.reduce((x,y)=>x+y,0)/5;document.getElementById("average").textContent=avg.toFixed(1)+"/10";renderPreview()}
-function renderChips(){document.getElementById("chips").innerHTML=commentBank.map((c,i)=>`<button class="chip ${selected.has(i)?"on":""}" onclick="toggleChip(${i})">${esc(c[1])}</button>`).join("")}
-function toggleChip(i){selected.has(i)?selected.delete(i):selected.add(i);renderChips();renderPreview()}
-function clearComment(){selected.clear();document.getElementById("extra").value="";renderChips();renderPreview()}
-function autoComment(){
- let s=scores(),pick=[];
- if(s[0]>=8)pick.push("Vocabulary tốt");else if(s[0]<7)pick.push("Ôn từ vựng");
- if(s[1]>=8)pick.push("Grammar tốt");else if(s[1]<7)pick.push("Ôn ngữ pháp");
- if(s[2]>=8)pick.push("Listening tốt");
- if(s[3]>=8)pick.push("Speaking tốt");else if(s[3]<7)pick.push("Speaking tự tin");
- if(s[4]>=8)pick.push("Writing tốt");
- let avg=s.reduce((a,b)=>a+b,0)/5;
- if(avg>=8)pick.push("Tiến bộ");if(avg>=9)pick.push("Thái độ tốt");if(avg<8)pick.push("Cố gắng");
- selected=new Set(pick.map(t=>commentBank.findIndex(c=>c[0]===t)).filter(i=>i>=0));
- renderChips();renderPreview();toast("Đã tạo nhận xét tự động ✨");
+function habits(){
+ let homework=Math.max(0,Math.min(100,Number(document.getElementById("homework")?.value)||0));
+ let attendance=Math.max(0,Math.min(100,Number(document.getElementById("attendance")?.value)||0));
+ return {homework,attendance};
+}
+function updateHabitUI(){
+ let {homework,attendance}=habits();
+ document.getElementById("homeworkPct").textContent=homework+"%";
+ document.getElementById("attendancePct").textContent=attendance+"%";
+ document.getElementById("homeworkBar").style.width=homework+"%";
+ document.getElementById("attendanceBar").style.width=attendance+"%";
+}
+function scoreChanged(){
+ let a=scores(),avg=a.reduce((x,y)=>x+y,0)/a.length;
+ document.getElementById("average").textContent=avg.toFixed(1)+"/10";
+ updateHabitUI();renderAutoFeedback();renderPreview();
+}
+function studyHabitsChanged(){updateHabitUI();renderAutoFeedback();renderPreview()}
+function renderChips(){const area=document.getElementById("chips");if(area)area.innerHTML=""}
+function clearComment(){document.getElementById("extra").value="";renderAutoFeedback();renderPreview()}
+function automaticCommentData(){
+ let s=scores(),{homework,attendance}=habits(),avg=s.reduce((a,b)=>a+b,0)/s.length;
+ let strengths=[],needs=[],goals=[];
+ if(s[0]>=8.5)strengths.push("Em có khả năng Nghe tốt và nắm được ý chính khá nhanh.");else if(s[0]<7)needs.push("Em nên luyện Nghe đều đặn hơn để tăng khả năng bắt ý và phản xạ.");
+ if(s[1]>=8.5)strengths.push("Em khá tự tin khi giao tiếp và biết cách diễn đạt ý bằng tiếng Anh.");else if(s[1]<7)needs.push("Em nên mạnh dạn nói thành câu và thực hành giao tiếp thường xuyên hơn.");
+ if(s[2]>=8.5)strengths.push("Em có nền tảng Đọc & Viết khá vững và biết trình bày ý tương đối rõ ràng.");else if(s[2]<7)needs.push("Em nên dành thêm thời gian đọc và kiểm tra lại câu viết để hạn chế lỗi.");
+ if(homework>=95)strengths.push("Em có ý thức hoàn thành bài tập rất tốt.");else if(homework<80)needs.push("Em cần duy trì thói quen hoàn thành bài tập đều đặn hơn.");
+ if(attendance>=95)strengths.push("Em có chuyên cần rất tốt và duy trì việc tham gia lớp học ổn định.");else if(attendance<80)needs.push("Em nên cố gắng tham gia lớp học đều đặn hơn để không bỏ lỡ nội dung.");
+ if(avg>=8.5)goals.push("Tiếp tục duy trì phong độ và thử sức với các nhiệm vụ nâng cao.");
+ if(s[0]<8)goals.push("Luyện nghe 5–10 phút mỗi ngày với các đoạn hội thoại ngắn.");
+ if(s[1]<8)goals.push("Tăng thời gian luyện nói và ưu tiên trả lời thành câu đầy đủ.");
+ if(s[2]<8)goals.push("Đọc thêm các đoạn ngắn và kiểm tra lại câu viết trước khi nộp bài.");
+ if(homework<95)goals.push("Đặt mục tiêu hoàn thành bài tập đúng hạn sau mỗi buổi học.");
+ if(attendance<95)goals.push("Duy trì lịch học đều đặn để theo dõi tiến bộ liên tục.");
+ if(!goals.length)goals.push("Tiếp tục duy trì thói quen học tập tích cực như hiện tại.");
+ let intro=avg>=8.5?"Em có kết quả học tập rất tích cực và đang thể hiện sự tiến bộ đáng ghi nhận.":avg>=7?"Em có nền tảng khá tốt và đang từng bước tiến bộ qua từng buổi học.":"Em đang trong quá trình củng cố kiến thức và cần thêm thời gian luyện tập.";
+ let close=avg>=8.5&&attendance>=95&&homework>=95?"Cô rất vui với tinh thần học tập của em. Hãy tiếp tục phát huy nhé! 🌷":"Cô ghi nhận sự cố gắng của em. Chỉ cần duy trì luyện tập đều đặn, em sẽ tiến bộ rõ rệt hơn nữa nhé! 💛";
+ return {text:[intro,strengths.slice(0,2).join(" "),needs.slice(0,2).join(" "),close].filter(Boolean).join(" "),goals:goals.slice(0,3)};
+}
+function autoComment(){renderAutoFeedback();toast("Đã tạo nhận xét thông minh ✨")}
+function renderAutoFeedback(){
+ let d=automaticCommentData();
+ const box=document.getElementById("autoFeedback"),goals=document.getElementById("goalList");
+ if(box)box.innerHTML="<strong>Nhận xét tự động:</strong> "+esc(d.text);
+ if(goals)goals.innerHTML=d.goals.map(x=>`<div class="goal-item">🌱 ${esc(x)}</div>`).join("");
 }
 function current(){
- let st=students.find(x=>String(x.id)===document.getElementById("student").value),s=scores(),avg=s.reduce((a,b)=>a+b,0)/5;
- let extra=document.getElementById("extra").value.trim();
- let comments=[...selected].sort((a,b)=>a-b).map(i=>commentBank[i][1]);if(extra)comments.push(extra);
- return {studentId:st?.id||"",name:st?.name||"Student",className:document.getElementById("className").value.trim()||st?.className||"—",date:document.getElementById("date").value||today(),lesson:document.getElementById("lesson").value.trim()||"—",scores:s,average:avg,comment:comments.join(" ")||"Chưa có nhận xét."};
+ let st=students.find(x=>String(x.id)===document.getElementById("student").value),s=scores(),avg=s.reduce((a,b)=>a+b,0)/s.length,{homework,attendance}=habits();
+ let extra=document.getElementById("extra").value.trim(),auto=automaticCommentData().text;
+ return {studentId:st?.id||"",name:st?.name||"Student",className:document.getElementById("className").value.trim()||st?.className||"—",date:document.getElementById("date").value||today(),lesson:document.getElementById("lesson").value.trim()||"—",scores:s,average:avg,homework,attendance,comment:extra?auto+" "+extra:auto};
 }
 function reportHTML(r){
  return `<div class="report"><div class="report-band"></div><div class="report-body">
@@ -236,15 +298,16 @@ function reportHTML(r){
  <div class="info"><div class="info-box"><small>Student</small><b>${esc(r.name)}</b></div><div class="info-box"><small>Class</small><b>${esc(r.className)}</b></div><div class="info-box"><small>Date</small><b>${dateVN(r.date)}</b></div></div>
  <div class="lesson"><b>Lesson:</b> ${esc(r.lesson)}</div>
  <div class="section-title">Assessment</div>
- <table class="report-table"><thead><tr><th>Learning Area</th><th>Score</th></tr></thead><tbody>${skillNames.map((s,i)=>`<tr><td>${s}</td><td>${r.scores[i].toFixed(1)}/10</td></tr>`).join("")}</tbody></table>
- <div class="overall"><div><b style="font-size:12px;color:#328b9c">OVERALL PERFORMANCE</b><div style="font-size:10px;color:#718096">Keep learning and growing!</div></div><b>${r.average.toFixed(1)}/10</b></div>
+ <table class="report-table"><thead><tr><th>Learning Skill</th><th>Score</th></tr></thead><tbody>${skillNames.map((s,i)=>`<tr><td>${s}</td><td>${r.scores[i].toFixed(1)}/10</td></tr>`).join("")}</tbody></table>
+ <div class="report-metrics"><div class="report-metric"><small>Homework Completion</small><b>${r.homework}%</b></div><div class="report-metric"><small>Attendance</small><b>${r.attendance}%</b></div></div>
+ <div class="overall"><div><b style="font-size:12px;color:#328b9c">AVERAGE SKILL SCORE</b><div style="font-size:10px;color:#718096">Keep learning, growing, and trying your best!</div></div><b>${r.average.toFixed(1)}/10</b></div>
  <div class="section-title">Teacher's Feedback</div><div class="feedback">${esc(r.comment)}</div>
  <div class="signature">I Love English Club<br><b>Ms. Gia Hân</b><br>English Teacher</div>
  </div></div>`
 }
 function renderPreview(){document.getElementById("preview").innerHTML=reportHTML(current())}
 function fillPDF(r){
- document.getElementById("pName").textContent=r.name;document.getElementById("pClass").textContent=r.className;document.getElementById("pDate").textContent=dateVN(r.date);document.getElementById("pLesson").textContent=r.lesson;document.getElementById("pAverage").textContent=r.average.toFixed(1)+"/10";document.getElementById("pComment").textContent=r.comment;
+ document.getElementById("pName").textContent=r.name;document.getElementById("pClass").textContent=r.className;document.getElementById("pDate").textContent=dateVN(r.date);document.getElementById("pLesson").textContent=r.lesson;document.getElementById("pAverage").textContent=r.average.toFixed(1)+"/10";document.getElementById("pHomework").textContent=r.homework+"%";document.getElementById("pAttendance").textContent=r.attendance+"%";document.getElementById("pComment").textContent=r.comment;
  document.getElementById("pScores").innerHTML=skillNames.map((s,i)=>`<tr><td>${s}</td><td>${r.scores[i].toFixed(1)}/10</td></tr>`).join("");
 }
 function printPDF(){let r=current();if(!students.length)return alert("Vui lòng thêm học sinh trước.");fillPDF(r);window.print()}
@@ -255,11 +318,22 @@ function saveReport(){
  editingId=null;saveData();toast("Đã lưu báo cáo 💗");renderDashboard();renderHistory();
 }
 function editReport(id){
- let r=reports.find(x=>x.id===id);if(!r)return;editingId=id;showPage("create");document.getElementById("student").value=r.studentId;document.getElementById("className").value=r.className;document.getElementById("date").value=r.date;document.getElementById("lesson").value=r.lesson;renderSkills();document.querySelectorAll(".scoreInput").forEach((x,i)=>x.value=r.scores[i]);selected=new Set();document.getElementById("extra").value=r.comment;document.getElementById("formTitle").textContent="Chỉnh sửa báo cáo";scoreChanged()
+ let r=reports.find(x=>x.id===id);if(!r)return;editingId=id;showPage("create");
+ document.getElementById("student").value=r.studentId;
+ document.getElementById("className").value=r.className;
+ document.getElementById("date").value=r.date;
+ document.getElementById("lesson").value=r.lesson;
+ renderSkills();
+ document.querySelectorAll(".scoreInput").forEach((x,i)=>x.value=r.scores?.[i]??8);
+ document.getElementById("homework").value=r.homework??100;
+ document.getElementById("attendance").value=r.attendance??100;
+ document.getElementById("extra").value="";
+ document.getElementById("formTitle").textContent="Chỉnh sửa báo cáo";
+ scoreChanged();
 }
 function renderDashboard(){
  document.getElementById("statStudents").textContent=students.length;document.getElementById("statReports").textContent=reports.length;
- let avg=reports.length?reports.reduce((a,b)=>a+b.average,0)/reports.length:0;document.getElementById("statAvg").textContent=reports.length?avg.toFixed(1):"—";document.getElementById("statExcellent").textContent=reports.filter(r=>r.average>=9).length;
+ let avg=reports.length?reports.reduce((a,b)=>a+b.average,0)/reports.length:0;let attendance=reports.length?reports.reduce((a,b)=>a+(b.attendance??100),0)/reports.length:0;document.getElementById("statAvg").textContent=reports.length?avg.toFixed(1):"—";document.getElementById("statAttendance").textContent=reports.length?Math.round(attendance)+"%":"—";
  document.getElementById("recent").innerHTML=reports.slice(0,8).map(r=>`<tr><td><b>${esc(r.name)}</b></td><td>${dateVN(r.date)}</td><td>${esc(r.lesson)}</td><td><span class="badge">${r.average.toFixed(1)}/10</span></td><td><button class="btn light" onclick="editReport(${r.id})">Xem</button></td></tr>`).join("")||`<tr><td colspan="5" style="text-align:center;color:#999;padding:25px">Chưa có báo cáo.</td></tr>`
 }
 function addStudent(){let n=document.getElementById("newName").value.trim(),c=document.getElementById("newClass").value.trim();if(!n)return alert("Nhập tên học sinh.");students.push({id:Date.now(),name:n,className:c});saveData();document.getElementById("newName").value="";document.getElementById("newClass").value="";renderStudents();populateStudents();renderDashboard();toast("Đã thêm học sinh")}
@@ -272,11 +346,7 @@ function renderHistory(){document.getElementById("historyTable").innerHTML=repor
 function clearAllReports(){if(confirm("Xóa toàn bộ báo cáo?")){reports=[];saveData();renderHistory();renderDashboard();toast("Đã xóa lịch sử")}}
 function preview(){document.getElementById("preview").scrollIntoView({behavior:"smooth"});renderPreview()}
 function toast(t){let x=document.getElementById("toast");x.textContent=t;x.classList.add("show");setTimeout(()=>x.classList.remove("show"),2200)}
-document.getElementById("date").value=today();document.getElementById("extra").addEventListener("input",renderPreview);populateStudents();renderSkills();renderChips();renderPreview();renderDashboard();renderHistory();renderStudents();
+document.getElementById("date").value=today();document.getElementById("extra").addEventListener("input",renderPreview);populateStudents();renderSkills();updateHabitUI();renderAutoFeedback();renderPreview();renderDashboard();renderHistory();renderStudents();
 </script>
 </body>
-</html>'''
-
-path=Path("/mnt/data/index.html")
-path.write_text(html, encoding="utf-8")
-print(path)
+</html>
