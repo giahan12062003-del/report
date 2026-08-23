@@ -105,9 +105,32 @@ table.simple{width:100%;border-collapse:collapse}table.simple th,table.simple td
   .pdf-overall .tagline{margin-top:1.2mm;font-size:8.5pt;color:#657386}
   .pdf-overall b{font-size:24pt;line-height:1;color:#c00000;white-space:nowrap}
   .pdf-feedback{font-size:9.2pt;line-height:1.55;padding:4mm 5mm;min-height:27mm;background:#fff7fa;border:1px solid #f0d9e2;border-left:4px solid #c00000;border-radius:0 4mm 4mm 0;color:#4b5a6c;box-shadow:0 1mm 2.5mm rgba(231,121,158,.05)}
-  .pdf-sign{text-align:right;margin-top:4mm;color:#7c8795;font-size:8pt;line-height:1.3;padding-bottom:1mm}
+  .pdf-sign{
+    position:absolute;
+    right:12mm;
+    bottom:18mm;
+    text-align:right;
+    color:#7c8795;
+    font-size:8pt;
+    line-height:1.45;
+    z-index:3;
+  }
   .pdf-sign b{color:#c00000;font-size:11pt}
-  .pdf-footer{position:absolute;left:12mm;right:12mm;bottom:4mm;border-top:1px solid #dfe9ec;padding-top:3mm;display:flex;justify-content:space-between;gap:8mm;font-size:7.5pt;color:#7c8795}
+  .pdf-footer{
+    position:absolute;
+    left:12mm;
+    right:12mm;
+    bottom:5mm;
+    border-top:1px solid #dfe9ec;
+    padding-top:3mm;
+    display:flex;
+    justify-content:space-between;
+    gap:8mm;
+    font-size:7.5pt;
+    color:#7c8795;
+    z-index:5;
+    background:#fff;
+  }
   .pdf-footer span:last-child{text-align:right}
   .bilingual-label .vn{display:block;margin-top:0.6mm;font-size:7.2pt;letter-spacing:0;color:#8a96a5;text-transform:none;font-weight:700}
   .pdf-table .bilingual-label .vn{font-size:7.2pt}
@@ -116,7 +139,6 @@ table.simple{width:100%;border-collapse:collapse}table.simple th,table.simple td
 
 
   .pdf-sheet{page-break-after:avoid;break-after:avoid-page}
-  .pdf-footer{z-index:5;background:#fff}
 }
 
 .metric-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:14px}
@@ -292,7 +314,7 @@ table.simple{width:100%;border-collapse:collapse}table.simple th,table.simple td
       <h1>Lịch sử báo cáo</h1>
       <div class="sub">Lưu trên Firebase để bạn có thể xem lại báo cáo cũ của từng học sinh và từng lớp.</div>
     </div>
-    <button class="btn danger" onclick="clearAllReports()">Xóa toàn bộ</button>
+    <button class="btn danger" onclick="clearAllReports()">🗑 Xóa toàn bộ lịch sử</button>
   </div>
 
   <div class="panel">
@@ -844,6 +866,89 @@ function renderStudents(){
      <div class="class-card"><small>Số báo cáo</small><b>${countReports}</b></div>`;
  }
 }
+
+function renderHistory(){
+  const tbody=document.getElementById("historyTable");
+  if(!tbody)return;
+
+  const cf=document.getElementById("historyClassFilter")?.value||"";
+  const sf=document.getElementById("historyStudentFilter")?.value||"";
+  const yf=document.getElementById("historyYearFilter")?.value||"";
+
+  let list=reports.filter(r=>{
+    const okClass=!cf||String(r.className||"")===cf;
+    const okStudent=!sf||String(r.studentId||"")===sf;
+    const okYear=!yf||String(r.date||"").slice(0,4)===yf;
+    return okClass&&okStudent&&okYear;
+  }).sort((a,b)=>{
+    const da=String(a.date||"");
+    const db=String(b.date||"");
+    if(db!==da)return db.localeCompare(da);
+    return String(b.id).localeCompare(String(a.id));
+  });
+
+  const summary=document.getElementById("historySummary");
+  if(summary){
+    summary.textContent = `Đang hiển thị ${list.length}/${reports.length} báo cáo.`;
+  }
+
+  tbody.innerHTML=list.map(r=>`
+    <tr>
+      <td><b>${esc(r.name)}</b></td>
+      <td>${esc(r.className||"—")}</td>
+      <td>${dateVN(r.date)}</td>
+      <td>${esc(r.lesson||"—")}</td>
+      <td><span class="badge">${Number(r.average||0).toFixed(1)}/10</span></td>
+      <td>
+        <div class="table-actions">
+          <button class="btn light small" onclick="viewReport('${String(r.id).replace(/'/g,"&#039;")}')">Xem / In</button>
+          <button class="btn danger small" onclick="deleteReport('${String(r.id).replace(/'/g,"&#039;")}')">Xóa</button>
+        </div>
+      </td>
+    </tr>
+  `).join("") || `
+    <tr>
+      <td colspan="6">
+        <div class="empty-state">
+          <div class="empty-icon">🌻</div>
+          Chưa có báo cáo phù hợp với bộ lọc.
+        </div>
+      </td>
+    </tr>`;
+}
+
+async function clearAllReports(){
+  if(!reports.length){
+    toast("Lịch sử hiện đang trống.");
+    return;
+  }
+
+  const message =
+    `Bạn sắp xóa toàn bộ ${reports.length} báo cáo học tập.\\n\\n` +
+    `Danh sách học sinh và dữ liệu lớp vẫn được giữ nguyên.\\n` +
+    `Thao tác này sẽ xóa lịch sử trên cả máy và Cloud Firestore.\\n\\n` +
+    `Bạn có chắc chắn muốn tiếp tục?`;
+
+  if(!confirm(message)) return;
+
+  reports=[];
+  saveData();
+  populateClassControls();
+  renderHistory();
+  renderDashboard();
+  renderStudents();
+
+  try{
+    if(window.ILEC_Firebase?.syncNow){
+      await window.ILEC_Firebase.syncNow(students,reports);
+    }
+    toast("Đã xóa toàn bộ lịch sử báo cáo.");
+  }catch(error){
+    console.error("Clear reports error:",error);
+    toast("Đã xóa trên máy; Firestore sẽ đồng bộ lại khi có kết nối.");
+  }
+}
+
 function openStudentHistory(id){
  showPage("history");
  const studentFilter=document.getElementById("historyStudentFilter");
@@ -895,6 +1000,8 @@ window.showPage=showPage;
 window.editReport=editReport;
 window.viewReport=viewReport;
 window.deleteReport=deleteReport;
+window.renderHistory=renderHistory;
+window.clearAllReports=clearAllReports;
 
 function bindActionButtons(){
   const btnPreview=document.querySelector('button[onclick="preview()"]');
