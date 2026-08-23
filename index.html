@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <title>I Love English Club | Ms. Gia Hân</title>
 <style>
 :root{
@@ -10,7 +13,7 @@
   --navy:#26364a;--muted:#748094;--line:#dfe7ec;--white:#fff;
 }
 *{box-sizing:border-box}
-body{margin:0;background:#f5f7fa;color:var(--navy);font-family:Inter,Segoe UI,Arial,sans-serif}
+body{margin:0;background:#f5f7fa;color:var(--navy);font-family:"Be Vietnam Pro",Inter,"Segoe UI",Arial,sans-serif}
 button,input,textarea{font:inherit}
 .app{display:flex;min-height:100vh}
 .sidebar{width:245px;background:#fff;border-right:1px solid var(--line);padding:25px 16px;position:fixed;left:0;top:0;bottom:0}
@@ -57,7 +60,8 @@ table.simple{width:100%;border-collapse:collapse}table.simple th,table.simple td
 .pdf-page{display:none}
 
 @media print{
-  html,body{width:210mm;height:297mm;margin:0!important;padding:0!important;background:#fff!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+  html,body{font-family:"Be Vietnam Pro",Arial,sans-serif;
+width:210mm;height:297mm;margin:0!important;padding:0!important;background:#fff!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
   body>*{display:none!important}
   .pdf-page{display:block!important;width:210mm;height:297mm;background:#fff}
   .pdf-sheet{
@@ -66,18 +70,18 @@ table.simple{width:100%;border-collapse:collapse}table.simple th,table.simple td
   }
   .pdf-band{display:none!important;height:0!important;margin:0!important;background:none!important}
   .pdf-inner{padding:10mm 12mm 24mm}
-  .pdf-brand{text-align:center;position:relative;padding:2mm 0 1mm}
+  .pdf-brand{text-align:center;position:relative;padding:1mm 0 0}
   .pdf-brand .eyebrow{display:inline-block;font-size:9pt;letter-spacing:2.8px;color:#58707b;font-weight:900;margin-bottom:1mm}
   .pdf-brand h1{font-size:24pt;line-height:1.05;margin:0;color:#26364a;letter-spacing:.2px}
   .pdf-brand .teacher{font-size:11pt;margin-top:2mm;color:#c00000;font-weight:900}
 
-  .pdf-logo-image{display:block;width:21mm;height:21mm;object-fit:contain;margin:0 auto 2mm}
-  .pdf-report-title{font-size:24pt;line-height:1;color:#c00000;font-weight:1000;letter-spacing:.4px}
-  .pdf-club-name{font-size:12pt;line-height:1.1;color:#111;font-weight:1000;margin-top:2mm}
-  .pdf-club-vn{font-size:11pt;line-height:1.1;color:#111;font-weight:900;margin-top:1mm}
-  .pdf-brand .teacher{font-size:10pt;margin-top:2.2mm;color:#c00000;font-weight:900}
+  .pdf-logo-image{display:block;width:14mm;height:14mm;object-fit:contain;margin:0 auto 2mm}
+  .pdf-report-title{font-size:20pt;line-height:1;color:#c00000;font-weight:1000;letter-spacing:.4px}
+  .pdf-club-name{font-size:9.5pt;line-height:1.1;color:#111;font-weight:1000;margin-top:2mm}
+  .pdf-club-vn{font-size:9pt;line-height:1.1;color:#111;font-weight:900;margin-top:1mm}
+  .pdf-brand .teacher{font-size:8.8pt;margin-top:2.2mm;color:#c00000;font-weight:900}
   .pdf-subtitle{text-align:center;margin-top:1.5mm;font-size:8.5pt;color:#788596}
-  .pdf-info{display:grid;grid-template-columns:1.35fr .85fr .9fr;gap:4mm;margin:7mm 0 4mm}
+  .pdf-info{display:grid;grid-template-columns:1.35fr .85fr .9fr;gap:4mm;margin:5mm 0 4mm}
   .pdf-info-box{min-height:18mm;padding:3.5mm 4mm;border-radius:4mm;border:1px solid #dce9ed;background:linear-gradient(135deg,#f1fbfd,#fff4f8);box-shadow:0 1.2mm 3mm rgba(38,54,74,.04)}
   .pdf-info-box small{display:block;font-size:7.5pt;text-transform:uppercase;letter-spacing:.8px;color:#718096;font-weight:900}
   .pdf-info-box b{display:block;margin-top:1.5mm;font-size:11pt;color:#26364a}
@@ -85,26 +89,26 @@ table.simple{width:100%;border-collapse:collapse}table.simple th,table.simple td
   .pdf-title{display:flex;align-items:center;gap:2mm;font-size:9pt;letter-spacing:1.7px;text-transform:uppercase;color:#2f8798;font-weight:900;margin:3.5mm 0 2mm}
   .pdf-title:before{content:"";width:7mm;height:1.8mm;border-radius:99px;background:#c00000}
   .pdf-table{width:100%;border-collapse:separate;border-spacing:0;border:1px solid #d9e6ea;border-radius:3.5mm;overflow:hidden;box-shadow:0 1.2mm 3mm rgba(38,54,74,.035)}
-  .pdf-table th{background:#eef9fb;color:#55727c;text-transform:uppercase;font-size:8.5pt;letter-spacing:.5px;padding:3.4mm 4mm;text-align:left}
-  .pdf-table td{font-size:10.5pt;padding:4mm 4mm;border-top:1px solid #e8eef1;color:#334155}
+  .pdf-table th{background:#eef9fb;color:#55727c;text-transform:uppercase;font-size:9pt;letter-spacing:.5px;padding:3.4mm 4mm;text-align:left}
+  .pdf-table td{font-size:11pt;padding:4.2mm 4mm;border-top:1px solid #e8eef1;color:#334155}
   .pdf-table td:last-child{text-align:right;font-weight:900;color:#c00000;font-size:11pt}
   .pdf-score-pills{display:grid;grid-template-columns:repeat(3,1fr);gap:3.5mm;margin-top:3.5mm}
   .pdf-score-pill{padding:3mm 3.5mm;border-radius:3mm;border:1px solid #dfe8ec;background:#fbfcfd}
-  .pdf-score-pill small{display:block;font-size:7.5pt;color:#788596;text-transform:uppercase;font-weight:900}
-  .pdf-score-pill b{display:block;margin-top:1mm;font-size:15pt;color:#c00000}
+  .pdf-score-pill small{display:block;font-size:8pt;color:#788596;text-transform:uppercase;font-weight:900}
+  .pdf-score-pill b{display:block;margin-top:1mm;font-size:16pt;color:#c00000}
   .pdf-habits{display:grid;grid-template-columns:1fr 1fr;gap:4mm;margin-top:3.5mm}
   .pdf-habit{padding:3.5mm 4mm;border-radius:3.5mm;background:linear-gradient(135deg,#f2fbfd,#fff5f8);border:1px solid #dce9ed}
-  .pdf-habit .label{font-size:8pt;color:#718096;text-transform:uppercase;letter-spacing:.5px;font-weight:900}
+  .pdf-habit .label{font-size:8.5pt;color:#718096;text-transform:uppercase;letter-spacing:.5px;font-weight:900}
   .pdf-habit .value{display:flex;align-items:end;justify-content:space-between;margin-top:1mm}
-  .pdf-habit strong{font-size:17pt;color:#26364a}
-  .pdf-habit span{font-size:8pt;color:#8a96a5;font-weight:700}
+  .pdf-habit strong{font-size:19pt;color:#26364a}
+  .pdf-habit span{font-size:8.2pt;color:#7a8796;font-weight:700}
   .pdf-progress{height:2.1mm;margin-top:2.2mm;border-radius:99px;background:#eaf0f2;overflow:hidden}
   .pdf-progress>span{display:block;height:100%;border-radius:99px;background:#c00000}
   .pdf-overall{margin-top:3.5mm;padding:4.2mm 5mm;border-radius:4mm;border:1px solid #dbe5e9;background:linear-gradient(105deg,#eaf8fb 0%,#fff0f5 100%);display:flex;justify-content:space-between;align-items:center;gap:8mm}
   .pdf-overall small{display:block;font-size:8pt;color:#718096;text-transform:uppercase;letter-spacing:.8px;font-weight:900}
   .pdf-overall .tagline{margin-top:1.2mm;font-size:8.5pt;color:#657386}
   .pdf-overall b{font-size:24pt;line-height:1;color:#c00000;white-space:nowrap}
-  .pdf-feedback{font-size:9.2pt;line-height:1.55;padding:4mm 5mm;min-height:27mm;background:#fff7fa;border:1px solid #f0d9e2;border-left:4px solid #c00000;border-radius:0 4mm 4mm 0;color:#4b5a6c;box-shadow:0 1mm 2.5mm rgba(231,121,158,.05)}
+  .pdf-feedback{font-size:10pt;line-height:1.55;padding:4mm 5mm;min-height:27mm;background:#fff7fa;border:1px solid #f0d9e2;border-left:4px solid #c00000;border-radius:0 4mm 4mm 0;color:#4b5a6c;box-shadow:0 1mm 2.5mm rgba(231,121,158,.05)}
   .pdf-footer{
     position:absolute;
     left:12mm;
@@ -149,6 +153,7 @@ table.simple{width:100%;border-collapse:collapse}table.simple th,table.simple td
 .report-metric{padding:11px 12px;border-radius:11px;background:#fbfcfd;border:1px solid var(--line)}
 .report-metric small{display:block;color:#788596;font-size:9px;text-transform:uppercase;font-weight:900}
 .report-metric b{display:block;margin-top:4px;color:var(--pink);font-size:16px}
+.report-metric em{display:block;margin-top:3px;font-style:normal;font-size:11px;color:#7b8794;font-weight:700}
 @media(max-width:650px){.metric-grid,.report-metrics{grid-template-columns:1fr}}
 
 
@@ -184,6 +189,11 @@ table.simple{width:100%;border-collapse:collapse}table.simple th,table.simple td
 }
 
 
+
+.auto-choice-row{display:flex;gap:10px;align-items:end;flex-wrap:wrap;margin:10px 0 8px}
+.auto-choice-row select{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--navy);font:inherit}
+.auto-choice-row .field{margin:0}
+#shuffleCommentBtn{white-space:nowrap}
 .comment-mode{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 10px}
 .comment-mode .mode-btn{border:1px solid #dfe7ec;background:#fff;color:#596273;border-radius:11px;padding:10px 13px;cursor:pointer;font-weight:800;transition:.18s}
 .comment-mode .mode-btn:hover{border-color:#c00000}
@@ -251,11 +261,20 @@ table.simple{width:100%;border-collapse:collapse}table.simple th,table.simple td
         <button type="button" class="mode-btn on" id="modeAuto" onclick="setCommentMode('auto')">✨ Tự động</button>
         <button type="button" class="mode-btn" id="modeManual" onclick="setCommentMode('manual')">✍️ Tự viết</button>
       </div>
-      <div class="comment-hint" id="commentHint">Hệ thống sẽ tự tạo nhận xét dựa trên điểm số, bài tập và chuyên cần.</div>
+      <div class="comment-hint" id="commentHint">Hệ thống có nhiều mẫu nhận xét khác nhau để hạn chế trùng lặp giữa các bé.</div>
+      <div class="auto-choice-row" id="autoChoiceRow">
+        <div class="field" style="flex:1;min-width:220px">
+          <label>MẪU NHẬN XÉT TỰ ĐỘNG</label>
+          <select id="commentVariantSelect" onchange="selectCommentVariant(this.value)">
+            <option value="random">🎲 Tự chọn mẫu khác</option>
+          </select>
+        </div>
+        <button type="button" class="btn pink" id="shuffleCommentBtn" onclick="shuffleComment()">🔄 Đổi nhận xét</button><button type="button" class="btn light" id="resetCommentVarBtn" onclick="resetCommentVariety()">↺ Làm mới kho mẫu</button>
+      </div>
       <div class="feedback-box" id="autoFeedback">Chưa có nhận xét tự động.</div>
       <div class="goal-list" id="goalList"></div>
-      <div class="field" style="margin-top:14px"><label id="extraLabel">NHẬN XÉT RIÊNG</label><textarea id="extra" rows="4" placeholder="Ví dụ: Cô rất vui vì con đã chủ động phát biểu nhiều hơn hôm nay..."></textarea></div>
-      <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap"><button type="button" class="btn primary" id="autoCommentBtn" onclick="autoComment()">✨ Tạo nhận xét thông minh</button><button type="button" class="btn light" onclick="clearComment()">Xóa</button></div>
+      <div class="field" style="margin-top:14px"><label id="extraLabel">NHẬN XÉT RIÊNG / CHỈNH SỬA THÊM</label><textarea id="extra" rows="4" placeholder="Bạn có thể thêm một câu riêng sau nhận xét tự động..."></textarea></div>
+      <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap"><button type="button" class="btn primary" id="autoCommentBtn" onclick="autoComment()">✨ Tạo nhận xét</button><button type="button" class="btn light" onclick="clearComment()">Xóa</button></div>
     </div>
   </div>
   <div class="preview panel"><h2>📄 Xem trước phiếu phụ huynh</h2><div id="preview"></div></div>
@@ -375,8 +394,8 @@ table.simple{width:100%;border-collapse:collapse}table.simple th,table.simple td
    </div>
    <div class="pdf-title">LEARNING HABITS <span class="vn">THÓI QUEN HỌC TẬP</span></div>
    <div class="pdf-habits">
-    <div class="pdf-habit"><div class="label bilingual-label">Homework Completion <span class="vn">Hoàn thành bài tập</span></div><div class="value"><strong id="pHomework">100%</strong><span class="bilingual-label">Consistency <span class="vn">Đều đặn</span></span></div><div class="pdf-progress"><span id="pHomeworkBar" style="width:100%"></span></div></div>
-    <div class="pdf-habit"><div class="label bilingual-label">Attendance <span class="vn">Chuyên cần</span></div><div class="value"><strong id="pAttendance">100%</strong><span class="bilingual-label">Participation <span class="vn">Tham gia</span></span></div><div class="pdf-progress"><span id="pAttendanceBar" style="width:100%"></span></div></div>
+    <div class="pdf-habit"><div class="label bilingual-label">Homework Completion <span class="vn">Hoàn thành bài tập</span></div><div class="value"><strong id="pHomework">100%</strong><span id="pHomeworkStatus" class="bilingual-label">—</span></div><div class="pdf-progress"><span id="pHomeworkBar" style="width:100%"></span></div></div>
+    <div class="pdf-habit"><div class="label bilingual-label">Attendance <span class="vn">Chuyên cần</span></div><div class="value"><strong id="pAttendance">100%</strong><span id="pAttendanceStatus" class="bilingual-label">—</span></div><div class="pdf-progress"><span id="pAttendanceBar" style="width:100%"></span></div></div>
    </div>
    <div class="pdf-overall"><div><small class="bilingual-label">Overall Performance <span class="vn">Kết quả tổng thể</span></small><div class="tagline">Keep learning, growing, and trying your best!</div></div><b id="pAverage">0.0/10</b></div>
    <div class="pdf-title">TEACHER'S FEEDBACK <span class="vn">NHẬN XÉT CỦA GIÁO VIÊN</span></div>
@@ -637,7 +656,7 @@ function populateStudents(){
 function syncClass(){let s=students.find(x=>String(x.id)===document.getElementById("student").value);if(s)document.getElementById("className").value=s.className||"";renderPreview()}
 function renderSkills(){
  let values=[...document.querySelectorAll(".scoreInput")].map(x=>x.value);
- document.getElementById("skills").innerHTML=skillNames.map((s,i)=>`<div class="skill"><div class="skill-name">${s}</div><input class="scoreInput" type="number" min="0" max="10" step=".5" value="${values[i]??8}" oninput="scoreChanged()"></div>`).join("");
+ document.getElementById("skills").innerHTML=skillNames.map((s,i)=>`<div class="skill"><div class="skill-name">${s} <span class="vn">${["Nghe","Nói","Đọc & Viết"][i]}</span></div><input class="scoreInput" type="number" min="0" max="10" step=".5" value="${values[i]??8}" oninput="scoreChanged()"></div>`).join("");
  scoreChanged();
 }
 function scores(){return [...document.querySelectorAll(".scoreInput")].map(x=>Math.max(0,Math.min(10,Number(x.value)||0)))}
@@ -661,12 +680,153 @@ function scoreChanged(){
 function studyHabitsChanged(){updateHabitUI();renderAutoFeedback();renderPreview()}
 function renderChips(){const area=document.getElementById("chips");if(area)area.innerHTML=""}
 let commentMode="auto";
+let selectedCommentVariant="random";
+let usedCommentVariants=JSON.parse(localStorage.getItem("ILEC_usedCommentVariants")||"[]");
+
+const commentVariants = [
+  {id:"warm_1",name:"Ấm áp & tích cực",build:(c)=>`${c.intro} ${c.strength} ${c.need} ${c.close}`},
+  {id:"warm_2",name:"Khích lệ nhẹ nhàng",build:(c)=>`Cô rất vui khi thấy em đang tiến bộ qua từng buổi học. ${c.strength} ${c.need} ${c.close}`},
+  {id:"warm_3",name:"Tự nhiên & gần gũi",build:(c)=>`Em đang có những tín hiệu học tập rất đáng khích lệ. ${c.strength} ${c.need} ${c.close}`},
+  {id:"praise_1",name:"Nhấn mạnh điểm mạnh",build:(c)=>`${c.strength} ${c.intro} ${c.need} ${c.close}`},
+  {id:"praise_2",name:"Khen & định hướng",build:(c)=>`Cô ghi nhận những nỗ lực của em trong buổi học này. ${c.strength} ${c.need} ${c.close}`},
+  {id:"short_1",name:"Ngắn gọn",build:(c)=>`${c.intro} ${c.strength} ${c.close}`},
+  {id:"short_2",name:"Súc tích",build:(c)=>`Em đang tiến bộ tốt. ${c.strength} ${c.need} ${c.close}`},
+  {id:"detailed_1",name:"Chi tiết",build:(c)=>`${c.intro} ${c.strength} ${c.need} Cô mong em tiếp tục duy trì những thói quen tốt và cố gắng thêm từng ngày. ${c.close}`},
+  {id:"detailed_2",name:"Chi tiết & định hướng",build:(c)=>`Qua buổi học này, cô thấy em đang có nhiều điểm tích cực. ${c.strength} ${c.need} ${c.close}`},
+  {id:"encourage_1",name:"Động viên",build:(c)=>`Mỗi bước tiến nhỏ đều rất đáng ghi nhận. ${c.strength} ${c.need} ${c.close}`},
+  {id:"encourage_2",name:"Cổ vũ",build:(c)=>`Cô tin rằng nếu tiếp tục giữ tinh thần học tập này, em sẽ còn tiến bộ hơn nữa. ${c.strength} ${c.need} ${c.close}`},
+  {id:"friendly_1",name:"Thân thiện",build:(c)=>`Hôm nay em đã có một buổi học thật đáng khích lệ. ${c.strength} ${c.need} ${c.close}`},
+  {id:"friendly_2",name:"Tươi sáng",build:(c)=>`Em đang đi đúng hướng rồi đó! ${c.strength} ${c.need} ${c.close}`},
+  {id:"parent_1",name:"Gửi phụ huynh",build:(c)=>`${c.intro} ${c.strength} ${c.need} Gia đình có thể tiếp tục đồng hành cùng em bằng những buổi luyện tập ngắn và đều đặn tại nhà. ${c.close}`},
+  {id:"parent_2",name:"Đồng hành cùng gia đình",build:(c)=>`${c.strength} ${c.need} Cô mong gia đình tiếp tục khích lệ em duy trì thói quen học tập đều đặn. ${c.close}`},
+  {id:"progress_1",name:"Nhấn mạnh tiến bộ",build:(c)=>`Cô ghi nhận sự tiến bộ của em qua từng buổi học. ${c.strength} ${c.need} ${c.close}`},
+  {id:"progress_2",name:"Tiến bộ nổi bật",build:(c)=>`Sự cố gắng của em đang tạo ra những thay đổi rất tích cực. ${c.strength} ${c.need} ${c.close}`},
+  {id:"confidence_1",name:"Tập trung sự tự tin",build:(c)=>`Em đang ngày càng tự tin hơn trong việc sử dụng tiếng Anh. ${c.strength} ${c.need} ${c.close}`},
+  {id:"confidence_2",name:"Khuyến khích tự tin",build:(c)=>`Cô rất vui khi thấy em mạnh dạn hơn trong giờ học. ${c.strength} ${c.need} ${c.close}`},
+  {id:"habit_1",name:"Nhấn mạnh thói quen",build:(c)=>`Những thói quen học tập đều đặn sẽ giúp em tiến bộ bền vững. ${c.strength} ${c.need} ${c.close}`},
+  {id:"habit_2",name:"Xây dựng thói quen",build:(c)=>`${c.intro} ${c.strength} ${c.need} Cô khuyến khích em duy trì lịch học và hoàn thành nhiệm vụ đều đặn. ${c.close}`},
+  {id:"positive_1",name:"Tích cực",build:(c)=>`${c.intro} ${c.strength} ${c.close}`},
+  {id:"positive_2",name:"Lạc quan",build:(c)=>`Em đang có nhiều nền tảng tốt để phát triển thêm. ${c.strength} ${c.need} ${c.close}`},
+  {id:"teacher_1",name:"Phong cách giáo viên",build:(c)=>`Cô đánh giá cao tinh thần học tập của em. ${c.strength} ${c.need} ${c.close}`},
+  {id:"teacher_2",name:"Nhận xét chuyên môn",build:(c)=>`Qua kết quả buổi học, cô nhận thấy em đang có những tiến bộ rõ ràng. ${c.strength} ${c.need} ${c.close}`},
+  {id:"gentle_1",name:"Nhẹ nhàng",build:(c)=>`${c.intro} ${c.strength} ${c.need} Hãy cứ bình tĩnh, luyện tập đều đặn và tiến bộ từng chút một nhé. ${c.close}`},
+  {id:"gentle_2",name:"Tinh tế",build:(c)=>`Em đang dần xây dựng được sự tự tin và thói quen học tập tốt. ${c.strength} ${c.need} ${c.close}`},
+  {id:"motivating_1",name:"Truyền động lực",build:(c)=>`Cô tin vào khả năng tiến bộ của em. ${c.strength} ${c.need} Hãy tiếp tục cố gắng và đừng ngại thử sức với những điều mới nhé. ${c.close}`},
+  {id:"motivating_2",name:"Thúc đẩy",build:(c)=>`Em đã làm rất tốt những điều mình đang làm. ${c.strength} ${c.need} Một chút cố gắng thêm mỗi ngày sẽ tạo nên thay đổi lớn. ${c.close}`},
+  {id:"balanced_1",name:"Cân bằng",build:(c)=>`${c.intro} ${c.strength} ${c.need} ${c.close}`},
+  {id:"balanced_2",name:"Cân bằng & rõ ràng",build:(c)=>`Cô nhận thấy em có nhiều điểm mạnh và cũng còn một vài mục tiêu để tiếp tục hoàn thiện. ${c.strength} ${c.need} ${c.close}`}
+];
+
+function persistUsedCommentVariants(){
+  localStorage.setItem("ILEC_usedCommentVariants",JSON.stringify(usedCommentVariants.slice(-100)));
+}
+
+function commentContext(){
+  let s=scores(),{homework,attendance}=habits(),avg=s.reduce((a,b)=>a+b,0)/s.length;
+  let strengths=[],needs=[];
+  if(s[0]>=8.5)strengths.push("Em có khả năng Nghe tốt và nắm được ý chính khá nhanh.");
+  else if(s[0]<7)needs.push("Em nên luyện Nghe đều đặn hơn để tăng khả năng bắt ý và phản xạ.");
+  else strengths.push("Em đang từng bước cải thiện khả năng Nghe và phản xạ tiếng Anh.");
+
+  if(s[1]>=8.5)strengths.push("Em khá tự tin khi giao tiếp và biết cách diễn đạt ý bằng tiếng Anh.");
+  else if(s[1]<7)needs.push("Em nên mạnh dạn nói thành câu và thực hành giao tiếp thường xuyên hơn.");
+  else strengths.push("Em đang có tiến bộ trong cách diễn đạt và sử dụng tiếng Anh khi giao tiếp.");
+
+  if(s[2]>=8.5)strengths.push("Em có nền tảng Đọc & Viết khá vững và biết trình bày ý tương đối rõ ràng.");
+  else if(s[2]<7)needs.push("Em nên dành thêm thời gian đọc và kiểm tra lại câu viết để hạn chế lỗi.");
+  else strengths.push("Em đang hình thành nền tảng khá tốt ở phần Đọc & Viết.");
+
+  if(homework>=95)strengths.push("Em có ý thức hoàn thành bài tập rất tốt.");
+  else if(homework<80)needs.push("Em cần duy trì thói quen hoàn thành bài tập đều đặn hơn.");
+
+  if(attendance>=95)strengths.push("Em có chuyên cần rất tốt và duy trì việc tham gia lớp học ổn định.");
+  else if(attendance<80)needs.push("Em nên cố gắng tham gia lớp học đều đặn hơn để không bỏ lỡ nội dung.");
+
+  let intro=avg>=8.5
+    ?"Em có kết quả học tập rất tích cực và đang thể hiện sự tiến bộ đáng ghi nhận."
+    :avg>=7
+      ?"Em có nền tảng khá tốt và đang từng bước tiến bộ qua từng buổi học."
+      :"Em đang trong quá trình củng cố kiến thức và cần thêm thời gian luyện tập.";
+
+  let need=needs.slice(0,2).join(" ");
+  if(!need) need=avg>=8.5
+    ?"Em có thể tiếp tục thử sức với những nhiệm vụ nâng cao để phát huy khả năng."
+    :"Em hãy tiếp tục luyện tập đều đặn để củng cố thêm sự tự tin.";
+
+  let close=avg>=8.5&&attendance>=95&&homework>=95
+    ?"Cô rất vui với tinh thần học tập của em. Hãy tiếp tục phát huy nhé! 🌷"
+    :"Cô ghi nhận sự cố gắng của em. Chỉ cần duy trì luyện tập đều đặn, em sẽ tiến bộ rõ rệt hơn nữa nhé! 💛";
+
+  return {intro,strength:(strengths[0]||"Em đang có những cố gắng đáng ghi nhận trong giờ học."),need,close,avg,homework,attendance};
+}
+
+function populateCommentVariantSelect(){
+  const select=document.getElementById("commentVariantSelect");
+  if(!select)return;
+  const old=selectedCommentVariant;
+  select.innerHTML=`<option value="random">🎲 Tự chọn mẫu khác</option>`+
+    commentVariants.map(v=>`<option value="${v.id}">${v.name}</option>`).join("");
+  if(commentVariants.some(v=>v.id===old)) select.value=old;
+  else select.value="random";
+}
+
+function pickAutoVariant(forceDifferent=true){
+  const context=commentContext();
+  let candidates=commentVariants.filter(v=>!forceDifferent || v.id!==selectedCommentVariant);
+  const unused=candidates.filter(v=>!usedCommentVariants.includes(v.id));
+  if(unused.length)candidates=unused;
+  if(!candidates.length)candidates=commentVariants.filter(v=>v.id!==selectedCommentVariant);
+  const chosen=candidates[Math.floor(Math.random()*candidates.length)]||commentVariants[0];
+
+  selectedCommentVariant=chosen.id;
+  if(!usedCommentVariants.includes(chosen.id)){
+    usedCommentVariants.push(chosen.id);
+    if(usedCommentVariants.length>100)usedCommentVariants=usedCommentVariants.slice(-100);
+    persistUsedCommentVariants();
+  }
+  const text=chosen.build(context);
+  return {text,goals:buildGoals(context),variantId:chosen.id,variantName:chosen.name};
+}
+
+function buildGoals(context){
+  const s=scores(),{homework,attendance}=habits(),goals=[];
+  if(context.avg>=8.5)goals.push("Tiếp tục duy trì phong độ và thử sức với các nhiệm vụ nâng cao.");
+  if(s[0]<8)goals.push("Luyện nghe 5–10 phút mỗi ngày với các đoạn hội thoại ngắn.");
+  if(s[1]<8)goals.push("Tăng thời gian luyện nói và ưu tiên trả lời thành câu đầy đủ.");
+  if(s[2]<8)goals.push("Đọc thêm các đoạn ngắn và kiểm tra lại câu viết trước khi nộp bài.");
+  if(homework<95)goals.push("Đặt mục tiêu hoàn thành bài tập đúng hạn sau mỗi buổi học.");
+  if(attendance<95)goals.push("Duy trì lịch học đều đặn để theo dõi tiến bộ liên tục.");
+  if(!goals.length)goals.push("Tiếp tục duy trì thói quen học tập tích cực như hiện tại.");
+  return goals.slice(0,3);
+}
+
+let currentAutoComment={text:"",goals:[],variantId:"random",variantName:"Tự chọn mẫu khác"};
+
+function selectCommentVariant(id){
+  selectedCommentVariant=id||"random";
+  if(commentMode==="auto") renderAutoFeedback();
+}
+
+function shuffleComment(){
+  selectedCommentVariant="random";
+  renderAutoFeedback(true);
+  toast("Đã đổi sang một mẫu nhận xét khác 🔄");
+}
+
+function resetCommentVariety(){
+  usedCommentVariants=[];
+  persistUsedCommentVariants();
+  selectedCommentVariant="random";
+  renderAutoFeedback(true);
+  toast("Đã làm mới danh sách mẫu nhận xét 🌻");
+}
 
 function setCommentMode(mode){
   commentMode=mode==="manual"?"manual":"auto";
   const autoBtn=document.getElementById("modeAuto"),manualBtn=document.getElementById("modeManual");
   const hint=document.getElementById("commentHint"),box=document.getElementById("autoFeedback"),goals=document.getElementById("goalList");
   const label=document.getElementById("extraLabel"),textarea=document.getElementById("extra"),action=document.getElementById("autoCommentBtn");
+  const chooser=document.getElementById("autoChoiceRow");
   if(autoBtn)autoBtn.classList.toggle("on",commentMode==="auto");
   if(manualBtn)manualBtn.classList.toggle("on",commentMode==="manual");
   if(commentMode==="manual"){
@@ -676,50 +836,77 @@ function setCommentMode(mode){
     if(label)label.textContent="NHẬN XÉT CỦA GIÁO VIÊN";
     if(textarea)textarea.placeholder="Viết nhận xét của cô tại đây...";
     if(action)action.style.display="none";
+    if(chooser)chooser.style.display="none";
   }else{
-    if(hint)hint.textContent="Hệ thống sẽ tự tạo nhận xét dựa trên điểm số, bài tập và chuyên cần.";
+    if(hint)hint.textContent="Hệ thống có nhiều mẫu nhận xét khác nhau để hạn chế trùng lặp giữa các bé.";
     if(box)box.style.display="block";
     if(goals)goals.style.display="grid";
-    if(label)label.textContent="NHẬN XÉT RIÊNG";
-    if(textarea)textarea.placeholder="Ví dụ: Cô rất vui vì con đã chủ động phát biểu nhiều hơn hôm nay...";
+    if(label)label.textContent="NHẬN XÉT RIÊNG / CHỈNH SỬA THÊM";
+    if(textarea)textarea.placeholder="Bạn có thể thêm một câu riêng sau nhận xét tự động...";
     if(action)action.style.display="inline-block";
+    if(chooser)chooser.style.display="flex";
+    populateCommentVariantSelect();
     renderAutoFeedback();
   }
   renderPreview();
 }
 
 function clearComment(){document.getElementById("extra").value="";renderAutoFeedback();renderPreview()}
+
 function automaticCommentData(){
- let s=scores(),{homework,attendance}=habits(),avg=s.reduce((a,b)=>a+b,0)/s.length;
- let strengths=[],needs=[],goals=[];
- if(s[0]>=8.5)strengths.push("Em có khả năng Nghe tốt và nắm được ý chính khá nhanh.");else if(s[0]<7)needs.push("Em nên luyện Nghe đều đặn hơn để tăng khả năng bắt ý và phản xạ.");
- if(s[1]>=8.5)strengths.push("Em khá tự tin khi giao tiếp và biết cách diễn đạt ý bằng tiếng Anh.");else if(s[1]<7)needs.push("Em nên mạnh dạn nói thành câu và thực hành giao tiếp thường xuyên hơn.");
- if(s[2]>=8.5)strengths.push("Em có nền tảng Đọc & Viết khá vững và biết trình bày ý tương đối rõ ràng.");else if(s[2]<7)needs.push("Em nên dành thêm thời gian đọc và kiểm tra lại câu viết để hạn chế lỗi.");
- if(homework>=95)strengths.push("Em có ý thức hoàn thành bài tập rất tốt.");else if(homework<80)needs.push("Em cần duy trì thói quen hoàn thành bài tập đều đặn hơn.");
- if(attendance>=95)strengths.push("Em có chuyên cần rất tốt và duy trì việc tham gia lớp học ổn định.");else if(attendance<80)needs.push("Em nên cố gắng tham gia lớp học đều đặn hơn để không bỏ lỡ nội dung.");
- if(avg>=8.5)goals.push("Tiếp tục duy trì phong độ và thử sức với các nhiệm vụ nâng cao.");
- if(s[0]<8)goals.push("Luyện nghe 5–10 phút mỗi ngày với các đoạn hội thoại ngắn.");
- if(s[1]<8)goals.push("Tăng thời gian luyện nói và ưu tiên trả lời thành câu đầy đủ.");
- if(s[2]<8)goals.push("Đọc thêm các đoạn ngắn và kiểm tra lại câu viết trước khi nộp bài.");
- if(homework<95)goals.push("Đặt mục tiêu hoàn thành bài tập đúng hạn sau mỗi buổi học.");
- if(attendance<95)goals.push("Duy trì lịch học đều đặn để theo dõi tiến bộ liên tục.");
- if(!goals.length)goals.push("Tiếp tục duy trì thói quen học tập tích cực như hiện tại.");
- let intro=avg>=8.5?"Em có kết quả học tập rất tích cực và đang thể hiện sự tiến bộ đáng ghi nhận.":avg>=7?"Em có nền tảng khá tốt và đang từng bước tiến bộ qua từng buổi học.":"Em đang trong quá trình củng cố kiến thức và cần thêm thời gian luyện tập.";
- let close=avg>=8.5&&attendance>=95&&homework>=95?"Cô rất vui với tinh thần học tập của em. Hãy tiếp tục phát huy nhé! 🌷":"Cô ghi nhận sự cố gắng của em. Chỉ cần duy trì luyện tập đều đặn, em sẽ tiến bộ rõ rệt hơn nữa nhé! 💛";
- return {text:[intro,strengths.slice(0,2).join(" "),needs.slice(0,2).join(" "),close].filter(Boolean).join(" "),goals:goals.slice(0,3)};
+  if(selectedCommentVariant!=="random"){
+    const chosen=commentVariants.find(v=>v.id===selectedCommentVariant);
+    if(chosen){
+      const context=commentContext();
+      const data={text:chosen.build(context),goals:buildGoals(context),variantId:chosen.id,variantName:chosen.name};
+      currentAutoComment=data;
+      return data;
+    }
+  }
+  const data=pickAutoVariant(false);
+  currentAutoComment=data;
+  return data;
 }
-function autoComment(){renderAutoFeedback();toast("Đã tạo nhận xét thông minh ✨")}
-function renderAutoFeedback(){
- let d=automaticCommentData();
- const box=document.getElementById("autoFeedback"),goals=document.getElementById("goalList");
- if(box)box.innerHTML="<strong>Nhận xét tự động:</strong> "+esc(d.text);
- if(goals)goals.innerHTML=d.goals.map(x=>`<div class="goal-item">🌱 ${esc(x)}</div>`).join("");
+
+function autoComment(){
+  selectedCommentVariant="random";
+  const d=pickAutoVariant(true);
+  currentAutoComment=d;
+  populateCommentVariantSelect();
+  renderAutoFeedback();
+  toast("Đã chọn một mẫu nhận xét mới ✨");
 }
+
+function renderAutoFeedback(forceNew=false){
+  let d;
+  if(forceNew){
+    selectedCommentVariant="random";
+    d=pickAutoVariant(true);
+    currentAutoComment=d;
+    populateCommentVariantSelect();
+  }else{
+    d=automaticCommentData();
+  }
+  const box=document.getElementById("autoFeedback"),goals=document.getElementById("goalList");
+  if(box)box.innerHTML=`<strong>Nhận xét tự động — ${esc(d.variantName)}:</strong> ${esc(d.text)}`;
+  if(goals)goals.innerHTML=d.goals.map(x=>`<div class="goal-item">🌱 ${esc(x)}</div>`).join("");
+}
+
+
+function habitStatus(pct, type){
+  const n=Number(pct)||0;
+  if(n>=95) return type==="attendance"?"Rất tốt":"Hoàn thành rất tốt";
+  if(n>=85) return type==="attendance"?"Tốt":"Hoàn thành tốt";
+  if(n>=70) return type==="attendance"?"Khá":"Khá";
+  if(n>=50) return "Cần cải thiện";
+  return "Cần cố gắng thêm";
+}
+
 function current(){
  let st=students.find(x=>String(x.id)===document.getElementById("student").value),s=scores(),avg=s.reduce((a,b)=>a+b,0)/s.length,{homework,attendance}=habits();
- let extra=document.getElementById("extra").value.trim(),auto=automaticCommentData().text;
- let comment=commentMode==="manual"?(extra||"Chưa có nhận xét."):(extra?auto+" "+extra:auto);
- return {studentId:st?.id||"",name:st?.name||"Student",className:document.getElementById("className").value.trim()||st?.className||"—",date:document.getElementById("date").value||today(),lesson:document.getElementById("lesson").value.trim()||"—",scores:s,average:avg,homework,attendance,comment,commentMode};
+ let extra=document.getElementById("extra").value.trim(),auto=automaticCommentData();
+ let comment=commentMode==="manual"?(extra||"Chưa có nhận xét."):(extra?auto.text+" "+extra:auto.text);
+ return {studentId:st?.id||"",name:st?.name||"Student",className:document.getElementById("className").value.trim()||st?.className||"—",date:document.getElementById("date").value||today(),lesson:document.getElementById("lesson").value.trim()||"—",scores:s,average:avg,homework,attendance,comment,commentMode,commentVariantId:auto.variantId||selectedCommentVariant,commentVariantName:auto.variantName||"Tự chọn mẫu khác"};
 }
 function reportHTML(r){
  return `<div class="report"><div class="report-band"></div><div class="report-body">
@@ -732,8 +919,8 @@ function reportHTML(r){
  <div class="info"><div class="info-box bilingual-label"><small>Student <span class="vn">Học sinh</span></small><b>${esc(r.name)}</b></div><div class="info-box bilingual-label"><small>Class <span class="vn">Lớp</span></small><b>${esc(r.className)}</b></div><div class="info-box bilingual-label"><small>Date <span class="vn">Ngày</span></small><b>${dateVN(r.date)}</b></div></div>
  <div class="lesson bilingual-label"><b>Lesson: <span class="vn">Bài học / Chủ đề</span></b> ${esc(r.lesson)}</div>
  <div class="section-title">Assessment <span class="vn">Đánh giá</span></div>
- <table class="report-table"><thead><tr><th class="bilingual-label">Learning Skill <span class="vn">Kỹ năng học tập</span></th><th class="bilingual-label">Score <span class="vn">Điểm</span></th></tr></thead><tbody>${skillNames.map((s,i)=>`<tr><td>${s}</td><td>${r.scores[i].toFixed(1)}/10</td></tr>`).join("")}</tbody></table>
- <div class="report-metrics"><div class="report-metric"><small class="bilingual-label">Homework Completion <span class="vn">Hoàn thành bài tập</span></small><b>${r.homework}%</b></div><div class="report-metric"><small class="bilingual-label">Attendance <span class="vn">Chuyên cần</span></small><b>${r.attendance}%</b></div></div>
+ <table class="report-table"><thead><tr><th class="bilingual-label">Learning Skill <span class="vn">Kỹ năng học tập</span></th><th class="bilingual-label">Score <span class="vn">Điểm</span></th></tr></thead><tbody>${skillNames.map((s,i)=>`<tr><td><span>${s}</span> <span class="vn">(${["Nghe","Nói","Đọc & Viết"][i]})</span></td><td>${r.scores[i].toFixed(1)}/10</td></tr>`).join("")}</tbody></table>
+ <div class="report-metrics"><div class="report-metric"><small class="bilingual-label">Homework Completion <span class="vn">Hoàn thành bài tập</span></small><b>${r.homework}%</b><em>${habitStatus(r.homework,"homework")}</em></div><div class="report-metric"><small class="bilingual-label">Attendance <span class="vn">Chuyên cần</span></small><b>${r.attendance}%</b><em>${habitStatus(r.attendance,"attendance")}</em></div></div>
  <div class="overall"><div><b style="font-size:12px;color:#a00000" class="bilingual-label">AVERAGE SKILL SCORE <span class="vn">Điểm trung bình kỹ năng</span></b><div style="font-size:10px;color:#718096">Keep learning, growing, and trying your best!</div></div><b>${r.average.toFixed(1)}/10</b></div>
  <div class="section-title">Teacher's Feedback <span class="vn">Nhận xét của giáo viên</span></div><div class="feedback">${esc(r.comment)}</div>
  <div class="signature">I Love English Club<br><b>Ms. Gia Hân</b><br>English Teacher</div>
@@ -756,12 +943,14 @@ function fillPDF(r){
   document.getElementById("pAttendance").textContent=r.attendance+"%";
   document.getElementById("pHomeworkBar").style.width=r.homework+"%";
   document.getElementById("pAttendanceBar").style.width=r.attendance+"%";
+  document.getElementById("pHomeworkStatus").innerHTML=habitStatus(r.homework,"homework");
+  document.getElementById("pAttendanceStatus").innerHTML=habitStatus(r.attendance,"attendance");
   document.getElementById("pComment").textContent=r.comment;
   skillNames.forEach((s,i)=>{
     const el=document.getElementById("pSkill"+i);
     if(el) el.textContent=r.scores[i].toFixed(1)+"/10";
   });
-  document.getElementById("pScores").innerHTML=skillNames.map((s,i)=>`<tr><td>${s}</td><td>${r.scores[i].toFixed(1)}/10</td></tr>`).join("");
+  document.getElementById("pScores").innerHTML=skillNames.map((s,i)=>`<tr><td><span>${s}</span> <span class="vn">(${["Nghe","Nói","Đọc & Viết"][i]})</span></td><td>${r.scores[i].toFixed(1)}/10</td></tr>`).join("");
 }
 function printPDF(){let r=current();if(!students.length)return alert("Vui lòng thêm học sinh trước.");fillPDF(r);window.print()}
 function saveReport(){
@@ -792,9 +981,15 @@ function editReport(id){
  document.getElementById("homework").value=r.homework??100;
  document.getElementById("attendance").value=r.attendance??100;
  commentMode=r.commentMode||"auto";
+ selectedCommentVariant=r.commentVariantId||"random";
  document.getElementById("extra").value=commentMode==="manual"?(r.comment||""):"";
  document.getElementById("formTitle").textContent="Chỉnh sửa báo cáo";
  setCommentMode(commentMode);
+ populateCommentVariantSelect();
+ if(commentMode==="auto" && r.commentVariantId){
+   const select=document.getElementById("commentVariantSelect");
+   if(select)select.value=r.commentVariantId;
+ }
  scoreChanged();
 }
 function renderDashboard(){
@@ -1031,6 +1226,11 @@ window.viewReport=viewReport;
 window.deleteReport=deleteReport;
 window.renderHistory=renderHistory;
 window.clearAllReports=clearAllReports;
+window.setCommentMode=setCommentMode;
+window.selectCommentVariant=selectCommentVariant;
+window.shuffleComment=shuffleComment;
+window.autoComment=autoComment;
+window.resetCommentVariety=resetCommentVariety;
 
 function bindActionButtons(){
   const btnPreview=document.querySelector('button[onclick="preview()"]');
@@ -1043,7 +1243,7 @@ function bindActionButtons(){
 
 document.getElementById("date").value=today();
 document.getElementById("extra").addEventListener("input",renderPreview);
-populateStudents();populateClassControls();renderSkills();updateHabitUI();setCommentMode("auto");renderPreview();renderDashboard();renderHistory();renderStudents();bindActionButtons();
+populateStudents();populateClassControls();populateCommentVariantSelect();renderSkills();updateHabitUI();setCommentMode("auto");renderPreview();renderDashboard();renderHistory();renderStudents();bindActionButtons();
 </script>
 </body>
 </html>
