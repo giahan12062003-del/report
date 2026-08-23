@@ -1,109 +1,50 @@
 from pathlib import Path
 
-# Recreate a complete V2.1 from the existing V2 file, adding the polished A4 PDF layer.
-src=Path("/mnt/data/index.html")
-html=src.read_text(encoding="utf-8")
+html = """<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ms. Gia Hân - English Report</title>
+<style>
+body{font-family:Arial,sans-serif;background:#f4f7fb;padding:20px}
+.box{max-width:900px;margin:auto;background:white;border-radius:20px;padding:30px;box-shadow:0 10px 30px rgba(0,0,0,.08)}
+h1{color:#5bb7c9} .pink{color:#e67aa0}
+input,textarea{width:100%;padding:10px;margin:8px 0;border:1px solid #ddd;border-radius:10px}
+button{background:#5bb7c9;color:white;border:0;padding:12px 18px;border-radius:10px;cursor:pointer}
+.report{margin-top:20px;border:2px solid #dce8eb;border-radius:20px;padding:25px;background:linear-gradient(135deg,#f4fbfc,#fff7fa)}
+</style>
+</head>
+<body>
+<div class="box">
+<h1>Teacher Report <span class="pink">Ms. Gia Hân</span></h1>
+<input id="name" placeholder="Tên học sinh">
+<input id="class" placeholder="Lớp">
+<input id="lesson" placeholder="Bài học">
+<textarea id="comment" placeholder="Nhận xét"></textarea>
+<button onclick="create()">Tạo phiếu</button>
+<button onclick="window.print()">Xuất PDF</button>
 
-css=r'''
-/* ===== ONE-PAGE A4 PARENT REPORT ===== */
-@page{size:A4 portrait;margin:0}
-.pdf-page{display:none}
-@media print{
-  html,body{width:210mm;height:297mm;background:#fff!important}
-  body>*{display:none!important}
-  .pdf-page{display:block!important;width:210mm;height:297mm;background:#fff;color:#26364a}
-  .pdf-sheet{width:210mm;height:297mm;position:relative;overflow:hidden;background:#fff}
-  .pdf-topbar{height:13mm;background:linear-gradient(100deg,#59b8c9,#79c9d3);position:absolute;left:0;right:0;top:0}
-  .pdf-pink{position:absolute;right:0;top:0;width:50mm;height:13mm;background:#f29ab3;clip-path:polygon(22% 0,100% 0,100% 100%,0 100%)}
-  .pdf-inner{position:absolute;left:17mm;right:17mm;top:23mm;bottom:16mm}
-  .pdf-kicker{font-size:9pt;letter-spacing:2.2px;color:#718096;font-weight:800}
-  .pdf-title{font-size:24pt;line-height:1.05;margin:3mm 0 1.5mm;font-weight:900;color:#26364a}
-  .pdf-teacher{font-size:10.5pt;color:#dd6f90;font-weight:800}
-  .pdf-student{margin-top:10mm;border:1px solid #dce8eb;border-radius:5mm;padding:6mm;background:linear-gradient(100deg,#f3fbfc,#fff7fa)}
-  .pdf-student-grid{display:grid;grid-template-columns:1.5fr .8fr .8fr;gap:6mm}
-  .pdf-label{font-size:7.5pt;color:#84909f;text-transform:uppercase;letter-spacing:1px;font-weight:800}
-  .pdf-value{font-size:12pt;font-weight:800;margin-top:1.5mm;color:#26364a}
-  .pdf-section{margin-top:8mm}
-  .pdf-section-title{font-size:10pt;letter-spacing:1px;text-transform:uppercase;font-weight:900;color:#378694;margin-bottom:3mm}
-  .pdf-table{width:100%;border-collapse:separate;border-spacing:0;border:1px solid #dfe8eb;border-radius:4mm;overflow:hidden}
-  .pdf-table th{background:#eef9fb;color:#5b7780;font-size:8pt;text-transform:uppercase;letter-spacing:.5px;padding:3mm 3.5mm;text-align:left}
-  .pdf-table td{padding:3.2mm 3.5mm;border-top:1px solid #e8eef0;font-size:9.5pt}
-  .pdf-table td:last-child{text-align:right;font-weight:900;color:#db6f91}
-  .pdf-overall{margin-top:5mm;display:flex;justify-content:space-between;align-items:center;border-radius:4mm;padding:4.5mm 5mm;background:linear-gradient(100deg,#eaf8fa,#fff0f5);border:1px solid #f0dbe2}
-  .pdf-overall-label{font-size:8pt;text-transform:uppercase;letter-spacing:1px;color:#718096;font-weight:900}
-  .pdf-score{font-size:21pt;font-weight:900;color:#d86d8e}
-  .pdf-feedback{border-left:4px solid #ef9bb5;background:#fff8fa;border-radius:0 4mm 4mm 0;padding:5mm 6mm;line-height:1.7;font-size:9.5pt;color:#4a5565;min-height:30mm}
-  .pdf-footer{position:absolute;left:0;right:0;bottom:0;border-top:1px solid #e4edf0;padding-top:4mm;display:flex;justify-content:space-between;color:#7b8794;font-size:8pt}
-  .pdf-sign{color:#d86d8e;font-weight:900}
-}
-'''
-html=html.replace("</style>",css+"</style>")
-
-pdf=r'''
-<div id="pdfPage" class="pdf-page">
- <div class="pdf-sheet">
-  <div class="pdf-topbar"></div><div class="pdf-pink"></div>
-  <div class="pdf-inner">
-   <div class="pdf-kicker">ENGLISH LEARNING REPORT</div>
-   <div class="pdf-title">Student Progress Report</div>
-   <div class="pdf-teacher">Ms. Gia Hân • English Teacher</div>
-
-   <div class="pdf-student">
-    <div class="pdf-student-grid">
-     <div><div class="pdf-label">Student</div><div class="pdf-value" id="pdfName">—</div></div>
-     <div><div class="pdf-label">Class</div><div class="pdf-value" id="pdfClass">—</div></div>
-     <div><div class="pdf-label">Date</div><div class="pdf-value" id="pdfDate">—</div></div>
-    </div>
-   </div>
-
-   <div class="pdf-section">
-    <div class="pdf-section-title">Lesson</div>
-    <div id="pdfLesson" style="font-size:10pt;color:#4a5565">—</div>
-   </div>
-
-   <div class="pdf-section">
-    <div class="pdf-section-title">Assessment</div>
-    <table class="pdf-table">
-     <thead><tr><th>Learning Area</th><th style="text-align:right">Score</th></tr></thead>
-     <tbody id="pdfScores"></tbody>
-    </table>
-    <div class="pdf-overall">
-     <div><div class="pdf-overall-label">Overall Performance</div><div style="font-size:8.5pt;color:#718096;margin-top:1mm">Keep learning and growing!</div></div>
-     <div class="pdf-score" id="pdfAverage">—</div>
-    </div>
-   </div>
-
-   <div class="pdf-section">
-    <div class="pdf-section-title">Teacher's Feedback</div>
-    <div class="pdf-feedback" id="pdfComment">—</div>
-   </div>
-
-   <div class="pdf-footer">
-    <span>Thank you for supporting your child's learning journey.</span>
-    <span class="pdf-sign">Ms. Gia Hân</span>
-   </div>
-  </div>
- </div>
+<div class="report" id="r">
+<h2 id="n">Student</h2>
+<p><b>Class:</b> <span id="c">-</span></p>
+<p><b>Lesson:</b> <span id="l">-</span></p>
+<p><b>Teacher's Feedback</b></p>
+<p id="cm">-</p>
+<p style="text-align:right;color:#e67aa0"><b>Ms. Gia Hân</b></p>
 </div>
-'''
-html=html.replace("</main>",pdf+"</main>")
+</div>
+<script>
+function create(){
+n.textContent=name.value||"Student";
+c.textContent=document.getElementById('class').value;
+l.textContent=lesson.value;
+cm.textContent=comment.value;
+}
+</script>
+</body>
+</html>"""
 
-old="function printReport(){renderPreview();window.print()}"
-new=r'''function printReport(){
- const r=formData();
- if(!r.name)return alert("Vui lòng chọn học sinh.");
- if(!r.date)r.date=today();
- document.getElementById("pdfName").textContent=r.name;
- document.getElementById("pdfClass").textContent=r.className||"—";
- document.getElementById("pdfDate").textContent=dateVN(r.date);
- document.getElementById("pdfLesson").textContent=r.lesson||"—";
- document.getElementById("pdfAverage").textContent=r.average.toFixed(1)+"/10";
- document.getElementById("pdfScores").innerHTML=subjects.map((s,i)=>`<tr><td>${esc(s)}</td><td>${r.scores[i].toFixed(1)}/10</td></tr>`).join("");
- document.getElementById("pdfComment").textContent=r.comment||"Con đã hoàn thành buổi học. Cô ghi nhận sự cố gắng của con và khuyến khích con tiếp tục luyện tập.";
- window.print();
-}'''
-html=html.replace(old,new)
-
-out=Path("/mnt/data/index.html")
-out.write_text(html,encoding="utf-8")
-print(f"Đã tạo: {out}")
+path = Path("/mnt/data/index.html")
+path.write_text(html, encoding="utf-8")
+print(str(path))
