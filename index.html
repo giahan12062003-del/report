@@ -5,46 +5,178 @@ html = """<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ms. Gia Hân - English Report</title>
+<title>I Love English Club - Student Report</title>
 <style>
-body{font-family:Arial,sans-serif;background:#f4f7fb;padding:20px}
-.box{max-width:900px;margin:auto;background:white;border-radius:20px;padding:30px;box-shadow:0 10px 30px rgba(0,0,0,.08)}
-h1{color:#5bb7c9} .pink{color:#e67aa0}
-input,textarea{width:100%;padding:10px;margin:8px 0;border:1px solid #ddd;border-radius:10px}
-button{background:#5bb7c9;color:white;border:0;padding:12px 18px;border-radius:10px;cursor:pointer}
-.report{margin-top:20px;border:2px solid #dce8eb;border-radius:20px;padding:25px;background:linear-gradient(135deg,#f4fbfc,#fff7fa)}
+:root{--blue:#59b8c9;--blue-light:#eef9fb;--pink:#e67aa0;--pink-light:#fff3f7;--text:#26364a}
+*{box-sizing:border-box}
+body{margin:0;background:#f4f7fb;color:var(--text);font-family:Arial,Segoe UI,sans-serif;padding:25px}
+.box{max-width:920px;margin:auto;background:#fff;border-radius:22px;padding:30px;box-shadow:0 12px 35px rgba(40,50,80,.09)}
+.brand{text-align:center;margin-bottom:25px}
+.club{font-size:28px;font-weight:900;color:var(--blue);letter-spacing:.5px}
+.teacher{color:var(--pink);font-weight:800;margin-top:5px}
+.subtitle{color:#7b8794;font-size:14px;margin-top:5px}
+.form{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.field{display:flex;flex-direction:column;gap:6px}
+.full{grid-column:1/-1}
+label{font-size:12px;font-weight:800;color:#667085}
+input,textarea{width:100%;padding:11px 12px;border:1px solid #dfe5eb;border-radius:10px;outline:none;font:inherit}
+input:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px #59b8c91c}
+.buttons{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
+button{border:0;border-radius:10px;padding:12px 17px;cursor:pointer;font-weight:800}
+.primary{background:var(--blue);color:#fff}.secondary{background:var(--pink);color:#fff}
+.report{margin-top:25px;border:1px solid #dce8eb;border-radius:18px;overflow:hidden;background:#fff}
+.report-top{height:14px;background:linear-gradient(90deg,var(--blue),#83ccd5 65%,var(--pink))}
+.report-inner{padding:30px}
+.report-head{text-align:center}
+.report-head .eyebrow{font-size:11px;letter-spacing:2px;color:#7b8794;font-weight:800}
+.report-head h2{font-size:25px;margin:8px 0 4px}
+.report-head .student{font-size:18px;font-weight:800;color:var(--pink)}
+.info{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:25px 0}
+.info div{background:linear-gradient(135deg,var(--blue-light),var(--pink-light));padding:14px;border-radius:12px}
+.info small{display:block;color:#7b8794;text-transform:uppercase;font-size:10px;font-weight:800}
+.info b{display:block;margin-top:5px}
+.section-title{font-size:12px;text-transform:uppercase;letter-spacing:1px;color:#378694;font-weight:900;margin:20px 0 8px}
+.feedback{background:var(--pink-light);border-left:4px solid var(--pink);padding:17px;border-radius:0 12px 12px 0;line-height:1.7;min-height:90px}
+.signature{text-align:right;margin-top:28px;color:#7b8794;font-size:13px}
+.signature b{color:var(--pink)}
+@media(max-width:650px){.form,.info{grid-template-columns:1fr}.full{grid-column:auto}}
+@page{size:A4 portrait;margin:0}
+@media print{
+ body{padding:0;background:white}
+ body>*{display:none!important}
+ .print-page{display:block!important;width:210mm;height:297mm;background:white}
+ .report{display:block;margin:0;border:0;border-radius:0;width:210mm;height:297mm}
+ .report-top{height:13mm}
+ .report-inner{padding:20mm 18mm}
+}
+.print-page{display:none}
 </style>
 </head>
 <body>
 <div class="box">
-<h1>Teacher Report <span class="pink">Ms. Gia Hân</span></h1>
-<input id="name" placeholder="Tên học sinh">
-<input id="class" placeholder="Lớp">
-<input id="lesson" placeholder="Bài học">
-<textarea id="comment" placeholder="Nhận xét"></textarea>
-<button onclick="create()">Tạo phiếu</button>
-<button onclick="window.print()">Xuất PDF</button>
+  <div class="brand">
+    <div class="club">I LOVE ENGLISH CLUB</div>
+    <div class="teacher">Ms. Gia Hân • English Teacher</div>
+    <div class="subtitle">Student Progress Report</div>
+  </div>
 
-<div class="report" id="r">
-<h2 id="n">Student</h2>
-<p><b>Class:</b> <span id="c">-</span></p>
-<p><b>Lesson:</b> <span id="l">-</span></p>
-<p><b>Teacher's Feedback</b></p>
-<p id="cm">-</p>
-<p style="text-align:right;color:#e67aa0"><b>Ms. Gia Hân</b></p>
+  <div class="form">
+    <div class="field">
+      <label>HỌC SINH</label>
+      <input id="name" placeholder="Ví dụ: Nguyễn Minh Khôi">
+    </div>
+    <div class="field">
+      <label>LỚP</label>
+      <input id="className" placeholder="Ví dụ: Flyers 1">
+    </div>
+    <div class="field">
+      <label>NGÀY</label>
+      <input id="date" type="date">
+    </div>
+    <div class="field">
+      <label>BÀI HỌC</label>
+      <input id="lesson" placeholder="Ví dụ: Unit 3 – Vocabulary">
+    </div>
+    <div class="field full">
+      <label>NHẬN XÉT</label>
+      <textarea id="comment" rows="5" placeholder="Nhập nhận xét dành cho phụ huynh..."></textarea>
+    </div>
+  </div>
+
+  <div class="buttons">
+    <button class="primary" onclick="createReport()">✨ Tạo phiếu</button>
+    <button class="secondary" onclick="printReport()">🖨️ Xuất PDF</button>
+  </div>
+
+  <div class="report">
+    <div class="report-top"></div>
+    <div class="report-inner">
+      <div class="report-head">
+        <div class="eyebrow">I LOVE ENGLISH CLUB</div>
+        <h2>STUDENT PROGRESS REPORT</h2>
+        <div class="student" id="rName">Student</div>
+      </div>
+
+      <div class="info">
+        <div><small>Class</small><b id="rClass">—</b></div>
+        <div><small>Date</small><b id="rDate">—</b></div>
+        <div><small>Lesson</small><b id="rLesson">—</b></div>
+      </div>
+
+      <div class="section-title">Teacher's Feedback</div>
+      <div class="feedback" id="rComment">Chưa có nhận xét.</div>
+
+      <div class="signature">
+        I Love English Club<br>
+        <b>Ms. Gia Hân</b><br>
+        English Teacher
+      </div>
+    </div>
+  </div>
 </div>
+
+<div class="print-page">
+  <div class="report">
+    <div class="report-top"></div>
+    <div class="report-inner">
+      <div class="report-head">
+        <div class="eyebrow">I LOVE ENGLISH CLUB</div>
+        <h2>STUDENT PROGRESS REPORT</h2>
+        <div class="student" id="pName">Student</div>
+      </div>
+      <div class="info">
+        <div><small>Class</small><b id="pClass">—</b></div>
+        <div><small>Date</small><b id="pDate">—</b></div>
+        <div><small>Lesson</small><b id="pLesson">—</b></div>
+      </div>
+      <div class="section-title">Teacher's Feedback</div>
+      <div class="feedback" id="pComment">Chưa có nhận xét.</div>
+      <div class="signature">
+        I Love English Club<br>
+        <b>Ms. Gia Hân</b><br>
+        English Teacher
+      </div>
+    </div>
+  </div>
 </div>
+
 <script>
-function create(){
-n.textContent=name.value||"Student";
-c.textContent=document.getElementById('class').value;
-l.textContent=lesson.value;
-cm.textContent=comment.value;
+const dateInput=document.getElementById('date');
+dateInput.value=new Date().toISOString().slice(0,10);
+
+function values(){
+  const name=document.getElementById('name').value.trim()||'Student';
+  const cls=document.getElementById('className').value.trim()||'—';
+  const lesson=document.getElementById('lesson').value.trim()||'—';
+  const date=document.getElementById('date').value;
+  const comment=document.getElementById('comment').value.trim()||'Chưa có nhận xét.';
+  let d='—';
+  if(date){const [y,m,day]=date.split('-');d=day+'/'+m+'/'+y}
+  return {name,cls,lesson,date:d,comment};
 }
+function createReport(){
+  const r=values();
+  document.getElementById('rName').textContent=r.name;
+  document.getElementById('rClass').textContent=r.cls;
+  document.getElementById('rDate').textContent=r.date;
+  document.getElementById('rLesson').textContent=r.lesson;
+  document.getElementById('rComment').textContent=r.comment;
+  document.getElementById('pName').textContent=r.name;
+  document.getElementById('pClass').textContent=r.cls;
+  document.getElementById('pDate').textContent=r.date;
+  document.getElementById('pLesson').textContent=r.lesson;
+  document.getElementById('pComment').textContent=r.comment;
+}
+function printReport(){
+  createReport();
+  window.print();
+}
+createReport();
 </script>
 </body>
-</html>"""
+</html>
+"""
 
-path = Path("/mnt/data/index.html")
-path.write_text(html, encoding="utf-8")
-print(str(path))
+path=Path("/mnt/data/index.html")
+path.write_text(html,encoding="utf-8")
+print(path)
