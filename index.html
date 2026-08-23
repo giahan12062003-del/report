@@ -49,21 +49,57 @@ table.simple{width:100%;border-collapse:collapse}table.simple th,table.simple td
 @media(max-width:650px){.app{display:block}.sidebar{position:static;width:100%;height:auto;border-right:0;border-bottom:1px solid var(--line)}.main{margin:0;width:100%;padding:16px}.form,.info{grid-template-columns:1fr}.full{grid-column:auto}}
 @page{size:A4 portrait;margin:0}
 .pdf-page{display:none}
+
 @media print{
-  html,body{width:210mm;height:297mm;background:#fff!important}
+  html,body{width:210mm;height:297mm;margin:0!important;padding:0!important;background:#fff!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
   body>*{display:none!important}
   .pdf-page{display:block!important;width:210mm;height:297mm;background:#fff}
-  .pdf-sheet{width:210mm;height:297mm;position:relative;overflow:hidden;background:#fff}
-  .pdf-band{height:14mm;background:linear-gradient(90deg,#55b8ca,#83ced7 62%,#e7799e)}
-  .pdf-inner{padding:12mm 17mm 10mm}
-  .pdf-brand{text-align:center}.pdf-brand .eyebrow{font-size:8.5pt;letter-spacing:2.4px;color:#718096;font-weight:900}.pdf-brand h1{font-size:21pt;margin:2.5mm 0 1mm}.pdf-brand .teacher{font-size:10pt;color:#e7799e;font-weight:900}
-  .pdf-info{display:grid;grid-template-columns:1.4fr .8fr .9fr;gap:4mm;margin:8mm 0 5mm}.pdf-info-box{padding:4mm;border-radius:3mm;background:linear-gradient(120deg,#eaf8fb,#fff0f5)}.pdf-info-box small{display:block;font-size:7pt;text-transform:uppercase;color:#718096;font-weight:900}.pdf-info-box b{display:block;margin-top:1mm;font-size:9.5pt}
-  .pdf-lesson{font-size:9pt;color:#566272;margin-bottom:5mm}.pdf-title{font-size:8.5pt;letter-spacing:1.5px;text-transform:uppercase;color:#328b9c;font-weight:900;margin:4mm 0 2.5mm}
-  .pdf-table{width:100%;border-collapse:collapse;border:1px solid #dce7eb}.pdf-table th{background:#eaf8fb;color:#58737c;text-transform:uppercase;font-size:7.5pt;padding:3mm;text-align:left}.pdf-table td{font-size:9pt;padding:3mm;border-top:1px solid #e8eef1}.pdf-table td:last-child{text-align:right;font-weight:900;color:#d85f86}
-  .pdf-overall{margin-top:4mm;padding:4mm 5mm;background:linear-gradient(90deg,#eaf8fb,#fff0f5);border-radius:3mm;display:flex;justify-content:space-between;align-items:center}.pdf-overall small{font-size:7.5pt;color:#718096;text-transform:uppercase;font-weight:900}.pdf-overall b{font-size:19pt;color:#d85f86}
-  .pdf-feedback{font-size:9pt;line-height:1.65;padding:4.5mm 5mm;background:#fff5f8;border-left:4px solid #e7799e;border-radius:0 3mm 3mm 0;min-height:25mm}
-  .pdf-sign{text-align:right;margin-top:8mm;color:#7c8795;font-size:8pt}.pdf-sign b{color:#d85f86;font-size:10pt}
-  .pdf-footer{position:absolute;left:17mm;right:17mm;bottom:7mm;border-top:1px solid #e4edf0;padding-top:3mm;display:flex;justify-content:space-between;font-size:7pt;color:#7c8795}
+  .pdf-sheet{
+    width:210mm;height:297mm;position:relative;overflow:hidden;
+    background:
+      radial-gradient(circle at 92% 7%, rgba(85,184,202,.12) 0 17mm, transparent 17.3mm),
+      radial-gradient(circle at 7% 93%, rgba(231,121,158,.10) 0 22mm, transparent 22.3mm),#fff;
+  }
+  .pdf-sheet:before{content:"";position:absolute;left:0;right:0;top:0;height:5mm;background:linear-gradient(90deg,#55b8ca 0%,#83ced7 48%,#e7799e 100%)}
+  .pdf-band{height:18mm;margin-top:5mm;background:radial-gradient(circle at 13% 35%,rgba(255,255,255,.30) 0 5mm,transparent 5.2mm),radial-gradient(circle at 84% 70%,rgba(255,255,255,.20) 0 8mm,transparent 8.2mm),linear-gradient(120deg,#55b8ca 0%,#72c5d1 50%,#e7799e 100%)}
+  .pdf-inner{padding:8mm 12mm 13mm}
+  .pdf-brand{text-align:center;position:relative;padding:2mm 0 1mm}
+  .pdf-brand .eyebrow{display:inline-block;font-size:9pt;letter-spacing:2.8px;color:#58707b;font-weight:900;margin-bottom:1mm}
+  .pdf-brand h1{font-size:24pt;line-height:1.05;margin:0;color:#26364a;letter-spacing:.2px}
+  .pdf-brand .teacher{font-size:11pt;margin-top:2mm;color:#c9577c;font-weight:900}
+  .pdf-subtitle{text-align:center;margin-top:1.5mm;font-size:8.5pt;color:#788596}
+  .pdf-info{display:grid;grid-template-columns:1.35fr .85fr .9fr;gap:4mm;margin:7mm 0 4mm}
+  .pdf-info-box{min-height:18mm;padding:3.5mm 4mm;border-radius:4mm;border:1px solid #dce9ed;background:linear-gradient(135deg,#f1fbfd,#fff4f8);box-shadow:0 1.2mm 3mm rgba(38,54,74,.04)}
+  .pdf-info-box small{display:block;font-size:7.5pt;text-transform:uppercase;letter-spacing:.8px;color:#718096;font-weight:900}
+  .pdf-info-box b{display:block;margin-top:1.5mm;font-size:11pt;color:#26364a}
+  .pdf-lesson{padding:3mm 4mm;margin:0 0 4mm;border-radius:3mm;background:#f8fbfc;border:1px dashed #cfe0e5;font-size:10pt;color:#566272}
+  .pdf-title{display:flex;align-items:center;gap:2mm;font-size:9pt;letter-spacing:1.7px;text-transform:uppercase;color:#2f8798;font-weight:900;margin:4.5mm 0 2.5mm}
+  .pdf-title:before{content:"";width:7mm;height:1.8mm;border-radius:99px;background:linear-gradient(90deg,#55b8ca,#e7799e)}
+  .pdf-table{width:100%;border-collapse:separate;border-spacing:0;border:1px solid #d9e6ea;border-radius:3.5mm;overflow:hidden;box-shadow:0 1.2mm 3mm rgba(38,54,74,.035)}
+  .pdf-table th{background:#eef9fb;color:#55727c;text-transform:uppercase;font-size:8.5pt;letter-spacing:.5px;padding:3.4mm 4mm;text-align:left}
+  .pdf-table td{font-size:10.5pt;padding:4mm 4mm;border-top:1px solid #e8eef1;color:#334155}
+  .pdf-table td:last-child{text-align:right;font-weight:900;color:#c9577c;font-size:11pt}
+  .pdf-score-pills{display:grid;grid-template-columns:repeat(3,1fr);gap:3.5mm;margin-top:3.5mm}
+  .pdf-score-pill{padding:3mm 3.5mm;border-radius:3mm;border:1px solid #dfe8ec;background:#fbfcfd}
+  .pdf-score-pill small{display:block;font-size:7.5pt;color:#788596;text-transform:uppercase;font-weight:900}
+  .pdf-score-pill b{display:block;margin-top:1mm;font-size:15pt;color:#c9577c}
+  .pdf-habits{display:grid;grid-template-columns:1fr 1fr;gap:4mm;margin-top:3.5mm}
+  .pdf-habit{padding:3.5mm 4mm;border-radius:3.5mm;background:linear-gradient(135deg,#f2fbfd,#fff5f8);border:1px solid #dce9ed}
+  .pdf-habit .label{font-size:8pt;color:#718096;text-transform:uppercase;letter-spacing:.5px;font-weight:900}
+  .pdf-habit .value{display:flex;align-items:end;justify-content:space-between;margin-top:1mm}
+  .pdf-habit strong{font-size:17pt;color:#26364a}
+  .pdf-habit span{font-size:8pt;color:#8a96a5;font-weight:700}
+  .pdf-progress{height:2.1mm;margin-top:2.2mm;border-radius:99px;background:#eaf0f2;overflow:hidden}
+  .pdf-progress>span{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#55b8ca,#e7799e)}
+  .pdf-overall{margin-top:4.5mm;padding:4.2mm 5mm;border-radius:4mm;border:1px solid #dbe5e9;background:linear-gradient(105deg,#eaf8fb 0%,#fff0f5 100%);display:flex;justify-content:space-between;align-items:center;gap:8mm}
+  .pdf-overall small{display:block;font-size:8pt;color:#718096;text-transform:uppercase;letter-spacing:.8px;font-weight:900}
+  .pdf-overall .tagline{margin-top:1.2mm;font-size:8.5pt;color:#657386}
+  .pdf-overall b{font-size:24pt;line-height:1;color:#c9577c;white-space:nowrap}
+  .pdf-feedback{font-size:10pt;line-height:1.72;padding:5mm 5.5mm;min-height:31mm;background:#fff7fa;border:1px solid #f0d9e2;border-left:4px solid #e7799e;border-radius:0 4mm 4mm 0;color:#4b5a6c;box-shadow:0 1mm 2.5mm rgba(231,121,158,.05)}
+  .pdf-sign{text-align:right;margin-top:6mm;color:#7c8795;font-size:8.5pt;line-height:1.4}
+  .pdf-sign b{color:#c9577c;font-size:11pt}
+  .pdf-footer{position:absolute;left:12mm;right:12mm;bottom:6mm;border-top:1px solid #dfe9ec;padding-top:3mm;display:flex;justify-content:space-between;gap:8mm;font-size:7.5pt;color:#7c8795}
+  .pdf-footer span:last-child{text-align:right}
 }
 
 .metric-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:14px}
@@ -111,7 +147,7 @@ table.simple{width:100%;border-collapse:collapse}table.simple th,table.simple td
 </section>
 
 <section id="create" class="hidden">
-  <div class="top"><div><h1 id="formTitle">Tạo báo cáo</h1><div class="sub">Nhập 3 kỹ năng chính + thói quen học tập → tạo nhận xét tự động → xuất PDF A4</div></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn light" onclick="preview()">👁 Xem phiếu</button><button class="btn pink" onclick="printPDF()">🖨 Xuất PDF</button><button class="btn primary" onclick="saveReport()">💾 Lưu</button></div></div>
+  <div class="top"><div><h1 id="formTitle">Tạo báo cáo</h1><div class="sub">Nhập 3 kỹ năng chính + thói quen học tập → tạo nhận xét tự động → xuất PDF A4</div></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn light" onclick="preview()">👁 Xem phiếu</button><button class="btn pink" onclick="printPDF()">🖨 Xuất PDF A4</button><button class="btn primary" onclick="saveReport()">💾 Lưu</button></div></div>
   <div class="grid2">
     <div class="panel">
       <h2>📌 Thông tin buổi học</h2>
@@ -178,6 +214,7 @@ table.simple{width:100%;border-collapse:collapse}table.simple th,table.simple td
     <div class="eyebrow">I LOVE ENGLISH CLUB</div>
     <h1>STUDENT PROGRESS REPORT</h1>
     <div class="teacher">Ms. Gia Hân • English Teacher</div>
+    <div class="pdf-subtitle">A little progress every day leads to big results.</div>
    </div>
    <div class="pdf-info">
     <div class="pdf-info-box"><small>Student</small><b id="pName">—</b></div>
@@ -186,8 +223,18 @@ table.simple{width:100%;border-collapse:collapse}table.simple th,table.simple td
    </div>
    <div class="pdf-lesson"><b>Lesson:</b> <span id="pLesson">—</span></div>
    <div class="pdf-title">Assessment</div>
-   <table class="pdf-table"><thead><tr><th>Learning Skill</th><th>Score</th></tr></thead><tbody id="pScores"></tbody></table><table class="pdf-table" style="margin-top:4mm"><thead><tr><th>Learning Habits</th><th>Status</th></tr></thead><tbody><tr><td>Homework Completion</td><td id="pHomework">100%</td></tr><tr><td>Attendance</td><td id="pAttendance">100%</td></tr></tbody></table>
-   <div class="pdf-overall"><div><small>Overall Performance</small><div style="font-size:8pt;color:#718096;margin-top:1mm">Keep learning and growing!</div></div><b id="pAverage">0.0/10</b></div>
+   <table class="pdf-table"><thead><tr><th>Learning Skill</th><th>Score</th></tr></thead><tbody id="pScores"></tbody></table>
+   <div class="pdf-score-pills">
+    <div class="pdf-score-pill"><small>Listening</small><b id="pSkill0">0.0/10</b></div>
+    <div class="pdf-score-pill"><small>Speaking</small><b id="pSkill1">0.0/10</b></div>
+    <div class="pdf-score-pill"><small>Reading &amp; Writing</small><b id="pSkill2">0.0/10</b></div>
+   </div>
+   <div class="pdf-title">Learning Habits</div>
+   <div class="pdf-habits">
+    <div class="pdf-habit"><div class="label">Homework Completion</div><div class="value"><strong id="pHomework">100%</strong><span>Consistency</span></div><div class="pdf-progress"><span id="pHomeworkBar" style="width:100%"></span></div></div>
+    <div class="pdf-habit"><div class="label">Attendance</div><div class="value"><strong id="pAttendance">100%</strong><span>Participation</span></div><div class="pdf-progress"><span id="pAttendanceBar" style="width:100%"></span></div></div>
+   </div>
+   <div class="pdf-overall"><div><small>Overall Performance</small><div class="tagline">Keep learning, growing, and trying your best!</div></div><b id="pAverage">0.0/10</b></div>
    <div class="pdf-title">Teacher's Feedback</div>
    <div class="pdf-feedback" id="pComment">—</div>
    <div class="pdf-sign">I Love English Club<br><b>Ms. Gia Hân</b><br>English Teacher</div>
@@ -195,7 +242,6 @@ table.simple{width:100%;border-collapse:collapse}table.simple th,table.simple td
   <div class="pdf-footer"><span>Thank you for supporting your child's learning journey.</span><span>Ms. Gia Hân • I Love English Club</span></div>
  </div>
 </div>
-
 <script>
 const skillNames=["Listening","Speaking","Reading & Writing"];
 const commentBank=[
@@ -307,8 +353,21 @@ function reportHTML(r){
 }
 function renderPreview(){document.getElementById("preview").innerHTML=reportHTML(current())}
 function fillPDF(r){
- document.getElementById("pName").textContent=r.name;document.getElementById("pClass").textContent=r.className;document.getElementById("pDate").textContent=dateVN(r.date);document.getElementById("pLesson").textContent=r.lesson;document.getElementById("pAverage").textContent=r.average.toFixed(1)+"/10";document.getElementById("pHomework").textContent=r.homework+"%";document.getElementById("pAttendance").textContent=r.attendance+"%";document.getElementById("pComment").textContent=r.comment;
- document.getElementById("pScores").innerHTML=skillNames.map((s,i)=>`<tr><td>${s}</td><td>${r.scores[i].toFixed(1)}/10</td></tr>`).join("");
+  document.getElementById("pName").textContent=r.name;
+  document.getElementById("pClass").textContent=r.className;
+  document.getElementById("pDate").textContent=dateVN(r.date);
+  document.getElementById("pLesson").textContent=r.lesson;
+  document.getElementById("pAverage").textContent=r.average.toFixed(1)+"/10";
+  document.getElementById("pHomework").textContent=r.homework+"%";
+  document.getElementById("pAttendance").textContent=r.attendance+"%";
+  document.getElementById("pHomeworkBar").style.width=r.homework+"%";
+  document.getElementById("pAttendanceBar").style.width=r.attendance+"%";
+  document.getElementById("pComment").textContent=r.comment;
+  skillNames.forEach((s,i)=>{
+    const el=document.getElementById("pSkill"+i);
+    if(el) el.textContent=r.scores[i].toFixed(1)+"/10";
+  });
+  document.getElementById("pScores").innerHTML=skillNames.map((s,i)=>`<tr><td>${s}</td><td>${r.scores[i].toFixed(1)}/10</td></tr>`).join("");
 }
 function printPDF(){let r=current();if(!students.length)return alert("Vui lòng thêm học sinh trước.");fillPDF(r);window.print()}
 function saveReport(){
