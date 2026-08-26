@@ -741,37 +741,37 @@ let selectedCommentVariant="random";
 let usedCommentVariants=JSON.parse(localStorage.getItem("ILEC_usedCommentVariants")||"[]");
 
 const commentVariants = [
-  {id:"warm_1",name:"Ấm áp & tích cực",build:(c)=>`${c.intro} ${c.strength} ${c.need} ${c.close}`},
-  {id:"warm_2",name:"Khích lệ nhẹ nhàng",build:(c)=>`Cô rất vui khi thấy em đang tiến bộ qua từng buổi học. ${c.strength} ${c.need} ${c.close}`},
-  {id:"warm_3",name:"Tự nhiên & gần gũi",build:(c)=>`Em đang có những tín hiệu học tập rất đáng khích lệ. ${c.strength} ${c.need} ${c.close}`},
+  {id:"warm_1",name:"Ấm áp & tích cực",build:(c)=>`${c.intro} ${c.scoreSummary} ${c.strength} ${c.need} ${c.close}`},
+  {id:"warm_2",name:"Khích lệ nhẹ nhàng",build:(c)=>`Cô rất vui khi thấy em đang tiến bộ qua từng buổi học. ${c.scoreSummary} ${c.strength} ${c.need} ${c.close}`},
+  {id:"warm_3",name:"Tự nhiên & gần gũi",build:(c)=>`Em đang có những tín hiệu học tập rất đáng khích lệ. ${c.scoreSummary} ${c.strength} ${c.need} ${c.close}`},
   {id:"praise_1",name:"Nhấn mạnh điểm mạnh",build:(c)=>`${c.strength} ${c.intro} ${c.need} ${c.close}`},
-  {id:"praise_2",name:"Khen & định hướng",build:(c)=>`Cô ghi nhận những nỗ lực của em trong buổi học này. ${c.strength} ${c.need} ${c.close}`},
-  {id:"short_1",name:"Ngắn gọn",build:(c)=>`${c.intro} ${c.strength} ${c.close}`},
-  {id:"short_2",name:"Súc tích",build:(c)=>`Em đang tiến bộ tốt. ${c.strength} ${c.need} ${c.close}`},
+  {id:"praise_2",name:"Khen & định hướng",build:(c)=>`Cô ghi nhận những nỗ lực của em trong buổi học này. ${c.scoreSummary} ${c.strength} ${c.need} ${c.close}`},
+  {id:"short_1",name:"Ngắn gọn",build:(c)=>`${c.intro} ${c.scoreSummary} ${c.strength} ${c.close}`},
+  {id:"short_2",name:"Súc tích",build:(c)=>`Em đang tiến bộ tốt. ${c.scoreSummary} ${c.strength} ${c.need} ${c.close}`},
   {id:"detailed_1",name:"Chi tiết",build:(c)=>`${c.intro} ${c.strength} ${c.need} Cô mong em tiếp tục duy trì những thói quen tốt và cố gắng thêm từng ngày. ${c.close}`},
-  {id:"detailed_2",name:"Chi tiết & định hướng",build:(c)=>`Qua buổi học này, cô thấy em đang có nhiều điểm tích cực. ${c.strength} ${c.need} ${c.close}`},
-  {id:"encourage_1",name:"Động viên",build:(c)=>`Mỗi bước tiến nhỏ đều rất đáng ghi nhận. ${c.strength} ${c.need} ${c.close}`},
-  {id:"encourage_2",name:"Cổ vũ",build:(c)=>`Cô tin rằng nếu tiếp tục giữ tinh thần học tập này, em sẽ còn tiến bộ hơn nữa. ${c.strength} ${c.need} ${c.close}`},
-  {id:"friendly_1",name:"Thân thiện",build:(c)=>`Hôm nay em đã có một buổi học thật đáng khích lệ. ${c.strength} ${c.need} ${c.close}`},
-  {id:"friendly_2",name:"Tươi sáng",build:(c)=>`Em đang đi đúng hướng rồi đó! ${c.strength} ${c.need} ${c.close}`},
+  {id:"detailed_2",name:"Chi tiết & định hướng",build:(c)=>`Qua buổi học này, cô thấy em đang có nhiều điểm tích cực. ${c.scoreSummary} ${c.strength} ${c.need} ${c.close}`},
+  {id:"encourage_1",name:"Động viên",build:(c)=>`Mỗi bước tiến nhỏ đều rất đáng ghi nhận. ${c.scoreSummary} ${c.strength} ${c.need} ${c.close}`},
+  {id:"encourage_2",name:"Cổ vũ",build:(c)=>`Cô tin rằng nếu tiếp tục giữ tinh thần học tập này, em sẽ còn tiến bộ hơn nữa. ${c.scoreSummary} ${c.strength} ${c.need} ${c.close}`},
+  {id:"friendly_1",name:"Thân thiện",build:(c)=>`Hôm nay em đã có một buổi học thật đáng khích lệ. ${c.scoreSummary} ${c.strength} ${c.need} ${c.close}`},
+  {id:"friendly_2",name:"Tươi sáng",build:(c)=>`Em đang đi đúng hướng rồi đó! ${c.scoreSummary} ${c.strength} ${c.need} ${c.close}`},
   {id:"parent_1",name:"Gửi phụ huynh",build:(c)=>`${c.intro} ${c.strength} ${c.need} Gia đình có thể tiếp tục đồng hành cùng em bằng những buổi luyện tập ngắn và đều đặn tại nhà. ${c.close}`},
   {id:"parent_2",name:"Đồng hành cùng gia đình",build:(c)=>`${c.strength} ${c.need} Cô mong gia đình tiếp tục khích lệ em duy trì thói quen học tập đều đặn. ${c.close}`},
-  {id:"progress_1",name:"Nhấn mạnh tiến bộ",build:(c)=>`Cô ghi nhận sự tiến bộ của em qua từng buổi học. ${c.strength} ${c.need} ${c.close}`},
-  {id:"progress_2",name:"Tiến bộ nổi bật",build:(c)=>`Sự cố gắng của em đang tạo ra những thay đổi rất tích cực. ${c.strength} ${c.need} ${c.close}`},
-  {id:"confidence_1",name:"Tập trung sự tự tin",build:(c)=>`Em đang ngày càng tự tin hơn trong việc sử dụng tiếng Anh. ${c.strength} ${c.need} ${c.close}`},
-  {id:"confidence_2",name:"Khuyến khích tự tin",build:(c)=>`Cô rất vui khi thấy em mạnh dạn hơn trong giờ học. ${c.strength} ${c.need} ${c.close}`},
-  {id:"habit_1",name:"Nhấn mạnh thói quen",build:(c)=>`Những thói quen học tập đều đặn sẽ giúp em tiến bộ bền vững. ${c.strength} ${c.need} ${c.close}`},
+  {id:"progress_1",name:"Nhấn mạnh tiến bộ",build:(c)=>`Cô ghi nhận sự tiến bộ của em qua từng buổi học. ${c.scoreSummary} ${c.strength} ${c.need} ${c.close}`},
+  {id:"progress_2",name:"Tiến bộ nổi bật",build:(c)=>`Sự cố gắng của em đang tạo ra những thay đổi rất tích cực. ${c.scoreSummary} ${c.strength} ${c.need} ${c.close}`},
+  {id:"confidence_1",name:"Tập trung sự tự tin",build:(c)=>`Em đang ngày càng tự tin hơn trong việc sử dụng tiếng Anh. ${c.scoreSummary} ${c.strength} ${c.need} ${c.close}`},
+  {id:"confidence_2",name:"Khuyến khích tự tin",build:(c)=>`Cô rất vui khi thấy em mạnh dạn hơn trong giờ học. ${c.scoreSummary} ${c.strength} ${c.need} ${c.close}`},
+  {id:"habit_1",name:"Nhấn mạnh thói quen",build:(c)=>`Những thói quen học tập đều đặn sẽ giúp em tiến bộ bền vững. ${c.scoreSummary} ${c.strength} ${c.need} ${c.close}`},
   {id:"habit_2",name:"Xây dựng thói quen",build:(c)=>`${c.intro} ${c.strength} ${c.need} Cô khuyến khích em duy trì lịch học và hoàn thành nhiệm vụ đều đặn. ${c.close}`},
-  {id:"positive_1",name:"Tích cực",build:(c)=>`${c.intro} ${c.strength} ${c.close}`},
-  {id:"positive_2",name:"Lạc quan",build:(c)=>`Em đang có nhiều nền tảng tốt để phát triển thêm. ${c.strength} ${c.need} ${c.close}`},
-  {id:"teacher_1",name:"Phong cách giáo viên",build:(c)=>`Cô đánh giá cao tinh thần học tập của em. ${c.strength} ${c.need} ${c.close}`},
-  {id:"teacher_2",name:"Nhận xét chuyên môn",build:(c)=>`Qua kết quả buổi học, cô nhận thấy em đang có những tiến bộ rõ ràng. ${c.strength} ${c.need} ${c.close}`},
+  {id:"positive_1",name:"Tích cực",build:(c)=>`${c.intro} ${c.scoreSummary} ${c.strength} ${c.close}`},
+  {id:"positive_2",name:"Lạc quan",build:(c)=>`Em đang có nhiều nền tảng tốt để phát triển thêm. ${c.scoreSummary} ${c.strength} ${c.need} ${c.close}`},
+  {id:"teacher_1",name:"Phong cách giáo viên",build:(c)=>`Cô đánh giá cao tinh thần học tập của em. ${c.scoreSummary} ${c.strength} ${c.need} ${c.close}`},
+  {id:"teacher_2",name:"Nhận xét chuyên môn",build:(c)=>`Qua kết quả buổi học, cô nhận thấy em đang có những tiến bộ rõ ràng. ${c.scoreSummary} ${c.strength} ${c.need} ${c.close}`},
   {id:"gentle_1",name:"Nhẹ nhàng",build:(c)=>`${c.intro} ${c.strength} ${c.need} Hãy cứ bình tĩnh, luyện tập đều đặn và tiến bộ từng chút một nhé. ${c.close}`},
-  {id:"gentle_2",name:"Tinh tế",build:(c)=>`Em đang dần xây dựng được sự tự tin và thói quen học tập tốt. ${c.strength} ${c.need} ${c.close}`},
+  {id:"gentle_2",name:"Tinh tế",build:(c)=>`Em đang dần xây dựng được sự tự tin và thói quen học tập tốt. ${c.scoreSummary} ${c.strength} ${c.need} ${c.close}`},
   {id:"motivating_1",name:"Truyền động lực",build:(c)=>`Cô tin vào khả năng tiến bộ của em. ${c.strength} ${c.need} Hãy tiếp tục cố gắng và đừng ngại thử sức với những điều mới nhé. ${c.close}`},
   {id:"motivating_2",name:"Thúc đẩy",build:(c)=>`Em đã làm rất tốt những điều mình đang làm. ${c.strength} ${c.need} Một chút cố gắng thêm mỗi ngày sẽ tạo nên thay đổi lớn. ${c.close}`},
-  {id:"balanced_1",name:"Cân bằng",build:(c)=>`${c.intro} ${c.strength} ${c.need} ${c.close}`},
-  {id:"balanced_2",name:"Cân bằng & rõ ràng",build:(c)=>`Cô nhận thấy em có nhiều điểm mạnh và cũng còn một vài mục tiêu để tiếp tục hoàn thiện. ${c.strength} ${c.need} ${c.close}`}
+  {id:"balanced_1",name:"Cân bằng",build:(c)=>`${c.intro} ${c.scoreSummary} ${c.strength} ${c.need} ${c.close}`},
+  {id:"balanced_2",name:"Cân bằng & rõ ràng",build:(c)=>`Cô nhận thấy em có nhiều điểm mạnh và cũng còn một vài mục tiêu để tiếp tục hoàn thiện. ${c.scoreSummary} ${c.strength} ${c.need} ${c.close}`}
 ];
 
 function persistUsedCommentVariants(){
@@ -822,6 +822,100 @@ const readingNeed=[
   "Nếu luyện đọc đều đặn hơn, em sẽ tự tin hơn rất nhiều ở phần Đọc & Viết."
 ];
 
+
+const skillBand={
+  outstanding:9,
+  strong:8,
+  developing:7
+};
+
+const listeningOutstanding=[
+  "Em nghe rất tốt, bắt ý nhanh và phản xạ với nội dung mới khá tự nhiên.",
+  "Cô đặc biệt khen khả năng nghe của em: em nhận biết từ khóa nhanh và nắm nội dung rất tốt.",
+  "Phần Nghe của em đang là một điểm mạnh nổi bật, em tiếp nhận thông tin khá tự tin.",
+  "Em có khả năng nghe hiểu rất tốt và đã biết sử dụng ngữ cảnh để đoán ý."
+];
+const listeningStrong=[
+  "Em nghe tốt và nắm được ý chính khá nhanh.",
+  "Khả năng nghe của em đang khá ổn, em đã biết chú ý đến những từ khóa quan trọng.",
+  "Cô nhận thấy em có phản xạ nghe tốt và ngày càng tự tin hơn."
+];
+const listeningDeveloping=[
+  "Em đang từng bước cải thiện khả năng nghe và phản xạ tiếng Anh.",
+  "Phần nghe của em đang tiến bộ, chỉ cần luyện đều đặn thêm một chút.",
+  "Em đã có nền tảng nghe khá ổn và đang dần tự tin hơn với nội dung mới."
+];
+const listeningSupport=[
+  "Em cần thêm thời gian luyện nghe để bắt từ khóa và phản xạ nhanh hơn.",
+  "Cô khuyến khích em nghe các đoạn hội thoại ngắn mỗi ngày để quen tai hơn.",
+  "Mình luyện nghe đều đặn hơn một chút nhé, cô tin em sẽ tiến bộ rõ rệt."
+];
+
+const speakingOutstanding=[
+  "Em giao tiếp rất tự tin, phản xạ tốt và biết diễn đạt ý khá tự nhiên bằng tiếng Anh.",
+  "Phần Nói của em là một điểm mạnh đáng khen, em chủ động và diễn đạt khá rõ ràng.",
+  "Cô rất vui vì em sử dụng tiếng Anh khi giao tiếp khá tự nhiên và mạnh dạn.",
+  "Em có phản xạ nói tốt và biết mở rộng câu trả lời thay vì chỉ trả lời ngắn."
+];
+const speakingStrong=[
+  "Em khá tự tin khi giao tiếp và biết cách diễn đạt ý bằng tiếng Anh.",
+  "Phần nói của em đang có tiến bộ, em ngày càng chủ động hơn khi tham gia hoạt động.",
+  "Cô vui vì em đã mạnh dạn hơn khi trả lời và sử dụng tiếng Anh."
+];
+const speakingDeveloping=[
+  "Em đang dần tự tin hơn khi trả lời và tham gia hoạt động nói.",
+  "Em đang có tiến bộ trong cách diễn đạt và sử dụng tiếng Anh khi giao tiếp.",
+  "Cô nhận thấy phản xạ nói của em đang tốt lên qua từng buổi học."
+];
+const speakingSupport=[
+  "Em nên mạnh dạn nói nhiều hơn và đừng quá lo lắng khi mắc lỗi nhé.",
+  "Cô mong em phát biểu thêm một chút để phản xạ nói ngày càng tự nhiên.",
+  "Mình tiếp tục luyện trả lời thành câu đầy đủ nhé, em sẽ tự tin hơn rất nhanh."
+];
+
+const readingOutstanding=[
+  "Phần Đọc & Viết của em rất tốt, em đọc hiểu nhanh và trình bày ý khá rõ ràng.",
+  "Cô đặc biệt khen khả năng đọc hiểu và cách em sắp xếp ý khi viết.",
+  "Em có nền tảng Đọc & Viết rất tốt và biết trình bày câu trả lời khá mạch lạc.",
+  "Em đọc hiểu tốt, viết rõ ý và ngày càng chú ý đến cách diễn đạt."
+];
+const readingStrong=[
+  "Em có nền tảng Đọc & Viết khá tốt và biết trình bày ý tương đối rõ ràng.",
+  "Phần Đọc & Viết của em có nhiều điểm đáng khen và đang tiến bộ ổn định.",
+  "Cô nhận thấy em đọc hiểu khá tốt và đang hình thành cách viết rõ ràng hơn."
+];
+const readingDeveloping=[
+  "Em đang hình thành nền tảng khá tốt ở phần Đọc & Viết.",
+  "Em đang tiến bộ trong cách đọc hiểu và trình bày câu trả lời.",
+  "Phần Đọc & Viết của em đang dần ổn định hơn, chỉ cần luyện thêm một chút."
+];
+const readingSupport=[
+  "Em nên dành thêm thời gian đọc và kiểm tra lại câu viết trước khi nộp bài.",
+  "Mình chú ý thêm một chút đến chính tả và cấu trúc câu nhé.",
+  "Cô mong em đọc kỹ đề và dành thêm thời gian rà soát phần viết."
+];
+
+function buildScoreAwareSkillNote(score, banks){
+  if(score>=skillBand.outstanding) return commentPick(banks.outstanding);
+  if(score>=skillBand.strong) return commentPick(banks.strong);
+  if(score>=skillBand.developing) return commentPick(banks.developing);
+  return commentPick(banks.support);
+}
+
+function buildSkillNotes(scores){
+  return [
+    buildScoreAwareSkillNote(scores[0],{
+      outstanding:listeningOutstanding,strong:listeningStrong,developing:listeningDeveloping,support:listeningSupport
+    }),
+    buildScoreAwareSkillNote(scores[1],{
+      outstanding:speakingOutstanding,strong:speakingStrong,developing:speakingDeveloping,support:speakingSupport
+    }),
+    buildScoreAwareSkillNote(scores[2],{
+      outstanding:readingOutstanding,strong:readingStrong,developing:readingDeveloping,support:readingSupport
+    })
+  ];
+}
+
 function buildSkillNote(score, goodBank, needBank, neutralBank){
   if(score>=8.5) return commentPick(goodBank);
   if(score<7) return commentPick(needBank);
@@ -845,11 +939,19 @@ function commentContext(){
     "Em đang tiến bộ trong cách đọc hiểu và trình bày câu trả lời."
   ];
 
-  const skillNotes=[
-    buildSkillNote(s[0],listeningPraise,listeningNeed,listeningNeutral),
-    buildSkillNote(s[1],speakingPraise,speakingNeed,speakingNeutral),
-    buildSkillNote(s[2],readingPraise,readingNeed,readingNeutral)
-  ];
+  const skillNotes=buildSkillNotes(s);
+
+  const skillNames=["Nghe","Nói","Đọc & Viết"];
+  const skillPairs=s.map((score,i)=>({score,i})).sort((a,b)=>b.score-a.score);
+  const strongest=skillPairs[0];
+  const weakest=skillPairs[skillPairs.length-1];
+
+  const scoreSummary =
+    strongest.score>=9
+      ? `Cô đặc biệt ghi nhận ${skillNames[strongest.i]} đang là một điểm mạnh nổi bật của em.`
+      : weakest.score<7
+        ? `Cô mong em dành thêm một chút thời gian cho phần ${skillNames[weakest.i]} để mình tiến bộ vững vàng hơn.`
+        : `Ba kỹ năng của em đang có những tín hiệu tiến bộ tích cực.`;
 
   // Keep all three core skills in every automatic comment, while varying the sentence order.
   const orders=[
@@ -888,13 +990,30 @@ function commentContext(){
     "Cô rất vui vì em ngày càng tự tin và chủ động hơn trong giờ học.",
     "Mỗi buổi học em lại có thêm một chút tiến bộ, cô thật sự rất vui khi được đồng hành cùng em."
   ];
-  const intro=avg>=8.5
-    ? commentPick([
-        "Cô đặc biệt ghi nhận sự tiến bộ của em và tinh thần học tập rất đáng khen.",
-        "Kết quả học tập của em đang cho thấy nhiều tín hiệu rất tích cực.",
-        "Cô rất vui vì em đang phát huy tốt khả năng của mình trong thời gian gần đây."
-      ])
-    : commentPick(openings);
+  const intro=
+    avg>=9
+      ? commentPick([
+          "Cô rất vui vì em đang có một kết quả học tập nổi bật và thể hiện sự tự tin rất tốt.",
+          "Kết quả hôm nay cho thấy em đang phát huy rất tốt những gì mình đã học.",
+          "Cô đặc biệt hài lòng với tinh thần học tập và mức độ tiến bộ của em."
+        ])
+      : avg>=8
+        ? commentPick([
+            "Cô rất vui khi thấy em đang duy trì một nền tảng học tập tốt và tiến bộ khá đều.",
+            "Qua buổi học hôm nay, cô ghi nhận ở em nhiều điểm mạnh và sự cố gắng đáng khen.",
+            "Cô nhận thấy em đang có nhịp học khá ổn và ngày càng tự tin hơn."
+          ])
+        : avg>=7
+          ? commentPick([
+              "Cô nhận thấy em đang có những bước tiến tích cực và bắt đầu hình thành nền tảng khá tốt.",
+              "Em đang tiến bộ từng bước, và cô rất vui khi thấy em không ngại cố gắng.",
+              "Qua buổi học hôm nay, cô thấy em có nhiều điểm đáng khích lệ."
+            ])
+          : commentPick([
+              "Cô ghi nhận sự cố gắng của em trong buổi học hôm nay và mong em tiếp tục kiên trì.",
+              "Em đang trong giai đoạn củng cố nền tảng, cô mong mình luyện tập đều đặn thêm một chút.",
+              "Cô thấy em đã cố gắng và mình sẽ tiếp tục đi từng bước chắc chắn nhé."
+            ]);
 
   const need=needs.length ? needs.slice(0,2).join(" ") : commentPick([
     "Em có thể tiếp tục thử sức với những nhiệm vụ nâng cao để phát huy khả năng.",
@@ -924,7 +1043,12 @@ function commentContext(){
     attendance,
     strengths,
     needs,
-    skillNotes
+    skillNotes,
+    scoreSummary,
+    strongestSkill:skillNames[strongest.i],
+    weakestSkill:skillNames[weakest.i],
+    strongestScore:strongest.score,
+    weakestScore:weakest.score
   };
 }
 
@@ -959,9 +1083,12 @@ function pickAutoVariant(forceDifferent=true){
 function buildGoals(context){
   const s=scores(),{homework,attendance}=habits(),goals=[];
   if(context.avg>=8.5)goals.push("Tiếp tục duy trì phong độ và thử sức với các nhiệm vụ nâng cao.");
-  if(s[0]<8)goals.push("Luyện nghe 5–10 phút mỗi ngày với các đoạn hội thoại ngắn.");
-  if(s[1]<8)goals.push("Tăng thời gian luyện nói và ưu tiên trả lời thành câu đầy đủ.");
-  if(s[2]<8)goals.push("Đọc thêm các đoạn ngắn và kiểm tra lại câu viết trước khi nộp bài.");
+  if(s[0]<7)goals.push("Ưu tiên luyện nghe 5–10 phút mỗi ngày với các đoạn hội thoại ngắn.");
+  else if(s[0]<8.5)goals.push("Duy trì luyện nghe đều đặn để tăng tốc độ bắt ý và phản xạ.");
+  if(s[1]<7)goals.push("Tăng thời gian luyện nói và tập trả lời thành câu đầy đủ.");
+  else if(s[1]<8.5)goals.push("Mạnh dạn phát biểu thêm để phản xạ giao tiếp ngày càng tự nhiên.");
+  if(s[2]<7)goals.push("Đọc các đoạn ngắn và dành thời gian kiểm tra lại câu viết.");
+  else if(s[2]<8.5)goals.push("Tiếp tục đọc và viết đều đặn để nâng độ chính xác và cách diễn đạt.");
   if(homework<95)goals.push("Đặt mục tiêu hoàn thành bài tập đúng hạn sau mỗi buổi học.");
   if(attendance<95)goals.push("Duy trì lịch học đều đặn để theo dõi tiến bộ liên tục.");
   if(!goals.length)goals.push("Tiếp tục duy trì thói quen học tập tích cực như hiện tại.");
