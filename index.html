@@ -212,7 +212,7 @@ width:210mm;height:297mm;margin:0!important;padding:0!important;background:#fff!
 
 <main class="main">
 <section id="dashboard">
-  <div class="top"><div><h1>Teacher Dashboard</h1><div class="sub">I Love English Club • Ms. Gia Hân <span id="firebaseStatus" style="display:inline-block;margin-left:8px;padding:4px 8px;border-radius:999px;background:#fff1f1;color:#a00000;font-weight:800;font-size:11px">☁ Firestore: đang kết nối...</span></div></div><button class="btn primary" onclick="showPage('create')">＋ Tạo báo cáo</button></div>
+  <div class="top"><div><h1>Teacher Dashboard</h1><div class="sub">I Love English Club • Ms. Gia Hân <span id="firebaseStatus" style="display:inline-block;margin-left:8px;padding:4px 8px;border-radius:999px;background:#fff1f1;color:#a00000;font-weight:800;font-size:11px">☁ Realtime Database: đang kết nối...</span></div></div><button class="btn primary" onclick="showPage('create')">＋ Tạo báo cáo</button></div>
   <div class="stats">
     <div class="stat"><small>Học sinh</small><b id="statStudents">0</b></div>
     <div class="stat"><small>Báo cáo</small><b id="statReports">0</b></div>
@@ -347,7 +347,7 @@ width:210mm;height:297mm;margin:0!important;padding:0!important;background:#fff!
       </div>
       <button class="btn light" onclick="resetHistoryFilters()">↺ Xóa bộ lọc</button>
     </div>
-    <div class="filter-note" id="historySummary">Đang hiển thị tất cả báo cáo.</div><div class="filter-note" style="margin-top:8px">Dữ liệu được lưu trong Cloud Firestore của project report-35066.</div>
+    <div class="filter-note" id="historySummary">Đang hiển thị tất cả báo cáo.</div><div class="filter-note" style="margin-top:8px">Dữ liệu được lưu trong Cloud Realtime Database của project report-35066.</div>
   </div>
 
   <div class="panel" style="margin-top:18px">
@@ -398,14 +398,12 @@ width:210mm;height:297mm;margin:0!important;padding:0!important;background:#fff!
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
   import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-analytics.js";
-  import {
-    getFirestore, collection, getDocs, doc, setDoc, deleteDoc,
-    writeBatch
-  } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+  import { getDatabase, ref, get, set, remove } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyDroSvSL4fJxgd7ZWQevMjLaBWBLVljFOA",
     authDomain: "report-35066.firebaseapp.com",
+    databaseURL: "https://report-35066-default-rtdb.firebaseio.com",
     projectId: "report-35066",
     storageBucket: "report-35066.firebasestorage.app",
     messagingSenderId: "456236091443",
@@ -415,7 +413,7 @@ width:210mm;height:297mm;margin:0!important;padding:0!important;background:#fff!
 
   const app = initializeApp(firebaseConfig);
   try { getAnalytics(app); } catch (e) { console.warn("Firebase Analytics không khả dụng:", e); }
-  const db = getFirestore(app);
+  const db = getDatabase(app);
 
   let cloudReady = false;
   let syncBusy = false;
@@ -426,15 +424,15 @@ width:210mm;height:297mm;margin:0!important;padding:0!important;background:#fff!
     const el=document.getElementById("firebaseStatus");
     if(!el) return;
     if(online){
-      el.textContent="☁ Firestore: đã đồng bộ";
+      el.textContent="☁ Realtime Database: đã đồng bộ";
       el.style.background="#eef9f2";
       el.style.color="#208a55";
-      el.title="Dữ liệu đã được đồng bộ lên Cloud Firestore.";
+      el.title="Dữ liệu đang được lưu trên Firebase Realtime Database.";
     }else{
-      el.textContent="⚠ Firestore: chưa đồng bộ";
+      el.textContent="⚠ Realtime Database: chưa đồng bộ";
       el.style.background="#fff0f0";
       el.style.color="#c63f54";
-      el.title=error?.message || "Không thể kết nối Firestore.";
+      el.title=error?.message || "Không thể kết nối Firebase Realtime Database.";
     }
   }
 
@@ -443,35 +441,28 @@ width:210mm;height:297mm;margin:0!important;padding:0!important;background:#fff!
     delete copy.__typename;
     return copy;
   }
-  function keyOf(item){ return String(item?.id ?? ""); }
-
-  async function readCollection(name){
-    const snap = await getDocs(collection(db,name));
-    return snap.docs.map(d=>({id:d.id,...d.data()}));
+  function asArray(value){
+    if(!value) return [];
+    if(Array.isArray(value)) return value.filter(Boolean).map(cleanItem);
+    if(typeof value==='object') return Object.entries(value).map(([id,data])=>({id:String(id),...(data||{})}));
+    return [];
+  }
+  function asMap(list){
+    const map={};
+    for(const item of Array.isArray(list)?list:[]){
+      const id=String(item?.id ?? "");
+      if(id) map[id]=cleanItem(item);
+    }
+    return map;
   }
 
-  async function writeAll(name, list){
-    const existing = await getDocs(collection(db,name));
-    const desired = Array.isArray(list) ? list : [];
-    const nextIds = new Set(desired.map(keyOf).filter(Boolean));
-    const ops=[];
+  async function readNode(name){
+    const snap=await get(ref(db,name));
+    return asArray(snap.exists()?snap.val():null);
+  }
 
-    existing.docs.forEach(d=>{
-      if(!nextIds.has(String(d.id))) ops.push({type:"delete",ref:d.ref});
-    });
-    desired.forEach(item=>{
-      const id=keyOf(item);
-      if(id) ops.push({type:"set",ref:doc(db,name,id),data:cleanItem(item)});
-    });
-
-    for(let i=0;i<ops.length;i+=450){
-      const batch=writeBatch(db);
-      for(const op of ops.slice(i,i+450)){
-        if(op.type==="delete") batch.delete(op.ref);
-        else batch.set(op.ref,op.data,{merge:false});
-      }
-      if(ops.length) await batch.commit();
-    }
+  async function writeNode(name,list){
+    await set(ref(db,name),asMap(list));
   }
 
   async function syncNow(students,reports){
@@ -480,99 +471,93 @@ width:210mm;height:297mm;margin:0!important;padding:0!important;background:#fff!
     syncBusy=true;
     syncAgain=false;
     try{
-      await Promise.all([writeAll("students",students),writeAll("reports",reports)]);
+      await Promise.all([writeNode('students',students),writeNode('reports',reports)]);
       localDataDirty=false;
       setFirebaseStatus(true);
       return true;
     }catch(error){
-      console.error("Firestore sync error:",error);
+      localDataDirty=true;
+      console.error('Realtime Database sync error:',error);
       setFirebaseStatus(false,error);
       return false;
     }finally{
       syncBusy=false;
       if(syncAgain){
-        queueSync(window.currentStudentsForFirebase?.() || [], window.currentReportsForFirebase?.() || []);
+        syncAgain=false;
+        queueSync(window.__APP_STUDENTS||[],window.__APP_REPORTS||[]);
       }
     }
   }
 
+  let syncTimer=null;
   function queueSync(students,reports){
-    localDataDirty=true;
-    window.__ILEC_PENDING_DATA={students:[...(students||[])],reports:[...(reports||[])]};
-    if(!cloudReady) return;
-    clearTimeout(queueSync.timer);
-    queueSync.timer=setTimeout(async()=>{
-      const d=window.__ILEC_PENDING_DATA || {students:[],reports:[]};
-      await syncNow(d.students,d.reports);
-    },120);
+    window.__APP_STUDENTS=students;
+    window.__APP_REPORTS=reports;
+    if(!cloudReady){localDataDirty=true;return;}
+    clearTimeout(syncTimer);
+    syncTimer=setTimeout(()=>syncNow(students,reports),250);
   }
 
-  function mergeRecords(cloudList, localList){
-    const map=new Map();
-    (Array.isArray(cloudList)?cloudList:[]).forEach(x=>map.set(String(x.id),x));
-    (Array.isArray(localList)?localList:[]).forEach(x=>map.set(String(x.id),x));
-    return [...map.values()];
+  async function deleteItem(name,id){
+    try{ await remove(ref(db,`${name}/${id}`)); return true; }
+    catch(error){ console.error('Realtime Database delete error:',error); setFirebaseStatus(false,error); return false; }
   }
 
   async function initCloud(){
     try{
-      const localStudents=JSON.parse(localStorage.getItem("ILEC_students")||"null")||[];
-      const localReports=JSON.parse(localStorage.getItem("ILEC_reports")||"[]")||[];
-      const [cloudStudents,cloudReports]=await Promise.all([
-        readCollection("students"),readCollection("reports")
-      ]);
+      setFirebaseStatus(false,new Error('Đang kết nối...'));
+      const [cloudStudents,cloudReports]=await Promise.all([readNode('students'),readNode('reports')]);
+      const localStudents=JSON.parse(localStorage.getItem('ILEC_students')||'null')||[];
+      const localReports=JSON.parse(localStorage.getItem('ILEC_reports')||'[]');
+
+      const mergeById=(cloudList,localList)=>{
+        const map=new Map();
+        (localList||[]).forEach(x=>{if(x?.id!=null) map.set(String(x.id),x)});
+        (cloudList||[]).forEach(x=>{if(x?.id!=null) map.set(String(x.id),x)});
+        return [...map.values()];
+      };
+
+      const hasCloud=cloudStudents.length>0 || cloudReports.length>0;
+      const hasLocal=localStudents.length>0 || localReports.length>0;
 
       cloudReady=true;
-
-      // Never throw away local data merely because the cloud has a partial/empty collection.
-      // Merge by id, with local values taking precedence for matching records.
-      const mergedStudents=mergeRecords(cloudStudents,localStudents);
-      const mergedReports=mergeRecords(cloudReports,localReports);
-      const localHasExtraStudents=mergedStudents.length>cloudStudents.length;
-      const localHasExtraReports=mergedReports.length>cloudReports.length;
-
-      students=mergedStudents;
-      reports=mergedReports;
-
-      if(localHasExtraStudents || localHasExtraReports || localDataDirty){
-        window.__ILEC_PENDING_DATA={students:[...students],reports:[...reports]};
+      if(hasCloud){
+        students=mergeById(cloudStudents,localStudents);
+        reports=mergeById(cloudReports,localReports);
         await syncNow(students,reports);
+        if(hasLocal) toast('Đã hợp nhất dữ liệu cũ với Firebase ☁️');
+      }else if(hasLocal){
+        students=[...localStudents];
+        reports=[...localReports];
+        await syncNow(students,reports);
+        toast('Đã chuyển dữ liệu cũ lên Firebase ☁️');
+      }else{
+        students=[];
+        reports=[];
+        setFirebaseStatus(true);
       }
 
-      localStorage.setItem("ILEC_students",JSON.stringify(students));
-      localStorage.setItem("ILEC_reports",JSON.stringify(reports));
+      localStorage.setItem('ILEC_students',JSON.stringify(students));
+      localStorage.setItem('ILEC_reports',JSON.stringify(reports));
       setFirebaseStatus(true);
-      window.ILEC_Firebase={db,queueSync,syncNow,deleteItem:async(name,id)=>{
-        try{ if(name && id!==undefined) await deleteDoc(doc(db,name,String(id))); return true; }
-        catch(error){ console.error("Firestore delete error:",error); return false; }
-      },cloudReady:true};
-      window.dispatchEvent(new CustomEvent("firebase-data-loaded",{detail:{students,reports}}));
-      // Rebuild the UI after cloud/local merge so automatic comments and filters are restored.
-      try{
-        populateStudents();
-        populateClassControls();
-        populateCommentVariantSelect();
-        renderSkills();
-        updateHabitUI();
-        setCommentMode(commentMode||"auto");
-        renderPreview();
-        renderDashboard();
-        renderHistory();
-        renderStudents();
-      }catch(uiError){ console.warn("UI refresh after Firestore load failed:",uiError); }
+      window.ILEC_Firebase={db,queueSync,syncNow,deleteItem,cloudReady:true};
+      window.__APP_STUDENTS=students;
+      window.__APP_REPORTS=reports;
+      window.dispatchEvent(new CustomEvent('firebase-data-loaded',{detail:{students,reports}}));
+      renderDashboard();
+      renderHistory();
+      renderStudents();
+      populateStudents();
+      populateClassControls();
     }catch(error){
       cloudReady=false;
-      console.error("Cloud Firestore khởi tạo thất bại:",error);
+      console.error('Firebase Realtime Database khởi tạo thất bại:',error);
       setFirebaseStatus(false,error);
-      window.ILEC_Firebase={db,queueSync,syncNow,deleteItem:async()=>false,cloudReady:false};
+      window.ILEC_Firebase={db,queueSync,syncNow,deleteItem,cloudReady:false};
     }
   }
 
-  window.currentStudentsForFirebase=()=>students||[];
-  window.currentReportsForFirebase=()=>reports||[];
-  window.setFirebaseStatus=setFirebaseStatus;
-  window.ILEC_Firebase={db,queueSync,syncNow,deleteItem:async()=>true,cloudReady:false};
-  initCloud();
+  window.__firebaseInitPromise=initCloud();
 </script>
 
 <script>
@@ -1359,7 +1344,7 @@ async function clearAllReports(){
   const message =
     `Bạn sắp xóa toàn bộ ${reports.length} báo cáo học tập.\\n\\n` +
     `Danh sách học sinh và dữ liệu lớp vẫn được giữ nguyên.\\n` +
-    `Thao tác này sẽ xóa lịch sử trên cả máy và Cloud Firestore.\\n\\n` +
+    `Thao tác này sẽ xóa lịch sử trên cả máy và Cloud Realtime Database.\\n\\n` +
     `Bạn có chắc chắn muốn tiếp tục?`;
 
   if(!confirm(message)) return;
@@ -1378,7 +1363,7 @@ async function clearAllReports(){
     toast("Đã xóa toàn bộ lịch sử báo cáo.");
   }catch(error){
     console.error("Clear reports error:",error);
-    toast("Đã xóa trên máy; Firestore sẽ đồng bộ lại khi có kết nối.");
+    toast("Đã xóa trên máy; Realtime Database sẽ đồng bộ lại khi có kết nối.");
   }
 }
 
@@ -1418,10 +1403,7 @@ window.addEventListener("firebase-data-loaded",e=>{
   localStorage.setItem("ILEC_reports",JSON.stringify(reports));
   populateStudents();
   populateClassControls();
-  populateCommentVariantSelect();
   renderSkills();
-  updateHabitUI();
-  setCommentMode(commentMode||"auto");
   renderPreview();
   renderDashboard();
   renderHistory();
