@@ -778,43 +778,154 @@ function persistUsedCommentVariants(){
   localStorage.setItem("ILEC_usedCommentVariants",JSON.stringify(usedCommentVariants.slice(-100)));
 }
 
+function commentPick(arr){
+  return arr[Math.floor(Math.random()*arr.length)];
+}
+
+const listeningPraise=[
+  "Em nghe khá tốt và bắt được ý chính nhanh.",
+  "Khả năng nghe hiểu của em đang tiến bộ rõ rệt, em đã biết chú ý đến những từ khóa quan trọng.",
+  "Em có phản xạ nghe khá nhanh và ngày càng tự tin hơn khi tiếp nhận nội dung mới.",
+  "Cô nhận thấy em đang hình thành nền tảng nghe khá tốt.",
+  "Phần nghe của em có nhiều điểm đáng khen, đặc biệt là khả năng nắm bắt nội dung chính."
+];
+const listeningNeed=[
+  "Em nên dành thêm một chút thời gian luyện nghe để phản xạ ngày càng tự nhiên hơn.",
+  "Cô khuyến khích em nghe lại các đoạn hội thoại ngắn thường xuyên hơn để quen tai.",
+  "Mình duy trì thói quen nghe đều đặn mỗi ngày một ít nhé, em sẽ bắt ý nhanh hơn.",
+  "Em có thể nghe lại bài ở nhà vài lần để củng cố từ vựng và phản xạ."
+];
+const speakingPraise=[
+  "Em khá tự tin khi giao tiếp và biết cách diễn đạt ý bằng tiếng Anh.",
+  "Cô rất vui vì em đã mạnh dạn hơn khi trả lời và tham gia các hoạt động nói.",
+  "Phần nói của em đang có tiến bộ, em ngày càng chủ động hơn khi sử dụng tiếng Anh.",
+  "Em có phản xạ nói khá tốt và đã biết cố gắng diễn đạt thành câu đầy đủ.",
+  "Cô nhận thấy sự tự tin của em trong giao tiếp đang tăng lên qua từng buổi học."
+];
+const speakingNeed=[
+  "Em hãy mạnh dạn nói nhiều hơn và đừng quá lo lắng khi mắc lỗi nhé.",
+  "Cô mong em phát biểu thêm một chút để phản xạ nói ngày càng tự nhiên.",
+  "Mình tiếp tục luyện trả lời thành câu đầy đủ nhé, em sẽ tự tin hơn rất nhanh.",
+  "Em cứ mạnh dạn thử nói trước, sau đó cô sẽ cùng em chỉnh sửa dần."
+];
+const readingPraise=[
+  "Em có nền tảng Đọc & Viết khá tốt và biết trình bày ý tương đối rõ ràng.",
+  "Phần Đọc & Viết của em có nhiều tiến bộ, em đã biết chú ý hơn đến nội dung và cách trình bày.",
+  "Em đọc hiểu khá ổn và đang dần hình thành thói quen viết câu rõ ràng hơn.",
+  "Cô nhận thấy em đang tiến bộ trong việc đọc hiểu và sắp xếp ý khi viết.",
+  "Em đang xây dựng được nền tảng khá chắc ở phần Đọc & Viết."
+];
+const readingNeed=[
+  "Em nên dành thêm thời gian đọc và kiểm tra lại câu viết trước khi nộp bài.",
+  "Mình chú ý thêm một chút đến chính tả và cấu trúc câu nhé.",
+  "Cô mong em đọc kỹ đề và dành thêm thời gian rà soát phần viết.",
+  "Nếu luyện đọc đều đặn hơn, em sẽ tự tin hơn rất nhiều ở phần Đọc & Viết."
+];
+
+function buildSkillNote(score, goodBank, needBank, neutralBank){
+  if(score>=8.5) return commentPick(goodBank);
+  if(score<7) return commentPick(needBank);
+  return commentPick(neutralBank);
+}
+
 function commentContext(){
   let s=scores(),{homework,attendance}=habits(),avg=s.reduce((a,b)=>a+b,0)/s.length;
   let strengths=[],needs=[];
-  if(s[0]>=8.5)strengths.push("Em có khả năng Nghe tốt và nắm được ý chính khá nhanh.");
-  else if(s[0]<7)needs.push("Em nên luyện Nghe đều đặn hơn để tăng khả năng bắt ý và phản xạ.");
-  else strengths.push("Em đang từng bước cải thiện khả năng Nghe và phản xạ tiếng Anh.");
 
-  if(s[1]>=8.5)strengths.push("Em khá tự tin khi giao tiếp và biết cách diễn đạt ý bằng tiếng Anh.");
-  else if(s[1]<7)needs.push("Em nên mạnh dạn nói thành câu và thực hành giao tiếp thường xuyên hơn.");
-  else strengths.push("Em đang có tiến bộ trong cách diễn đạt và sử dụng tiếng Anh khi giao tiếp.");
+  const listeningNeutral=[
+    "Em đang từng bước cải thiện khả năng nghe và phản xạ tiếng Anh.",
+    "Em có nền tảng nghe khá ổn và đang dần tự tin hơn với nội dung mới."
+  ];
+  const speakingNeutral=[
+    "Em đang có tiến bộ trong cách diễn đạt và sử dụng tiếng Anh khi giao tiếp.",
+    "Em đang dần tự tin hơn khi trả lời và tham gia hoạt động nói."
+  ];
+  const readingNeutral=[
+    "Em đang hình thành nền tảng khá tốt ở phần Đọc & Viết.",
+    "Em đang tiến bộ trong cách đọc hiểu và trình bày câu trả lời."
+  ];
 
-  if(s[2]>=8.5)strengths.push("Em có nền tảng Đọc & Viết khá vững và biết trình bày ý tương đối rõ ràng.");
-  else if(s[2]<7)needs.push("Em nên dành thêm thời gian đọc và kiểm tra lại câu viết để hạn chế lỗi.");
-  else strengths.push("Em đang hình thành nền tảng khá tốt ở phần Đọc & Viết.");
+  const skillNotes=[
+    buildSkillNote(s[0],listeningPraise,listeningNeed,listeningNeutral),
+    buildSkillNote(s[1],speakingPraise,speakingNeed,speakingNeutral),
+    buildSkillNote(s[2],readingPraise,readingNeed,readingNeutral)
+  ];
 
-  if(homework>=95)strengths.push("Em có ý thức hoàn thành bài tập rất tốt.");
-  else if(homework<80)needs.push("Em cần duy trì thói quen hoàn thành bài tập đều đặn hơn.");
+  // Keep all three core skills in every automatic comment, while varying the sentence order.
+  const orders=[
+    [0,1,2],[1,2,0],[2,0,1],[0,2,1],[1,0,2],[2,1,0]
+  ];
+  const order=commentPick(orders);
+  const skillSummary=order.map(i=>skillNotes[i]).join(" ");
 
-  if(attendance>=95)strengths.push("Em có chuyên cần rất tốt và duy trì việc tham gia lớp học ổn định.");
-  else if(attendance<80)needs.push("Em nên cố gắng tham gia lớp học đều đặn hơn để không bỏ lỡ nội dung.");
+  // Additional learning-habit feedback.
+  if(homework>=95) strengths.push(commentPick([
+    "Em có ý thức hoàn thành bài tập rất tốt.",
+    "Cô rất vui vì em có trách nhiệm với phần bài tập của mình.",
+    "Em đang duy trì thói quen hoàn thành nhiệm vụ học tập khá ổn định."
+  ]));
+  else if(homework<80) needs.push(commentPick([
+    "Em cần duy trì thói quen hoàn thành bài tập đều đặn hơn.",
+    "Cô mong em chú ý hơn đến việc hoàn thành bài sau mỗi buổi học.",
+    "Mình cố gắng sắp xếp thời gian để hoàn thành bài đúng hạn nhé."
+  ]));
 
-  let intro=avg>=8.5
-    ?"Em có kết quả học tập rất tích cực và đang thể hiện sự tiến bộ đáng ghi nhận."
-    :avg>=7
-      ?"Em có nền tảng khá tốt và đang từng bước tiến bộ qua từng buổi học."
-      :"Em đang trong quá trình củng cố kiến thức và cần thêm thời gian luyện tập.";
+  if(attendance>=95) strengths.push(commentPick([
+    "Em tham gia lớp học đầy đủ và giữ được nhịp học ổn định.",
+    "Sự chuyên cần của em là một điểm rất đáng khen.",
+    "Cô ghi nhận tinh thần đi học và tham gia lớp đầy đủ của em."
+  ]));
+  else if(attendance<80) needs.push(commentPick([
+    "Em nên cố gắng tham gia lớp học đều đặn hơn để không bỏ lỡ nội dung.",
+    "Cô mong em giữ lịch học ổn định hơn để theo kịp tiến độ.",
+    "Tham gia lớp đều đặn sẽ giúp em theo dõi việc học liên tục hơn."
+  ]));
 
-  let need=needs.slice(0,2).join(" ");
-  if(!need) need=avg>=8.5
-    ?"Em có thể tiếp tục thử sức với những nhiệm vụ nâng cao để phát huy khả năng."
-    :"Em hãy tiếp tục luyện tập đều đặn để củng cố thêm sự tự tin.";
+  const openings=[
+    "Cô rất vui khi thấy em đang từng bước tiến bộ qua mỗi buổi học.",
+    "Qua buổi học hôm nay, cô ghi nhận ở em nhiều điểm tích cực.",
+    "Cô nhận thấy em đang có những thay đổi đáng khích lệ trong việc học tiếng Anh.",
+    "Cô rất vui vì em ngày càng tự tin và chủ động hơn trong giờ học.",
+    "Mỗi buổi học em lại có thêm một chút tiến bộ, cô thật sự rất vui khi được đồng hành cùng em."
+  ];
+  const intro=avg>=8.5
+    ? commentPick([
+        "Cô đặc biệt ghi nhận sự tiến bộ của em và tinh thần học tập rất đáng khen.",
+        "Kết quả học tập của em đang cho thấy nhiều tín hiệu rất tích cực.",
+        "Cô rất vui vì em đang phát huy tốt khả năng của mình trong thời gian gần đây."
+      ])
+    : commentPick(openings);
 
-  let close=avg>=8.5&&attendance>=95&&homework>=95
-    ?"Cô rất vui với tinh thần học tập của em. Hãy tiếp tục phát huy nhé! 🌷"
-    :"Cô ghi nhận sự cố gắng của em. Chỉ cần duy trì luyện tập đều đặn, em sẽ tiến bộ rõ rệt hơn nữa nhé! 💛";
+  const need=needs.length ? needs.slice(0,2).join(" ") : commentPick([
+    "Em có thể tiếp tục thử sức với những nhiệm vụ nâng cao để phát huy khả năng.",
+    "Cô khuyến khích em tiếp tục luyện tập đều đặn để duy trì sự tự tin.",
+    "Mình cứ tiếp tục giữ nhịp học như hiện tại nhé."
+  ]);
+  const close=avg>=8.5&&attendance>=95&&homework>=95
+    ? commentPick([
+        "Cô rất vui với tinh thần học tập của em. Hãy tiếp tục phát huy nhé! 🌷",
+        "Cô tin em sẽ còn tiến bộ hơn nữa nếu tiếp tục giữ phong độ này nhé!",
+        "Tiếp tục cố gắng như vậy nhé con, cô rất mong chờ những bước tiến tiếp theo."
+      ])
+    : commentPick([
+        "Cô ghi nhận sự cố gắng của em. Cứ duy trì luyện tập đều đặn, em sẽ tiến bộ rõ rệt hơn nữa nhé! 💛",
+        "Em cứ tự tin và cố gắng từng chút một nhé, cô luôn ghi nhận sự tiến bộ của em.",
+        "Chỉ cần kiên trì thêm một chút mỗi ngày, cô tin em sẽ còn tự tin hơn rất nhiều."
+      ]);
 
-  return {intro,strength:(strengths[0]||"Em đang có những cố gắng đáng ghi nhận trong giờ học."),need,close,avg,homework,attendance};
+  return {
+    intro,
+    strength:skillSummary,
+    skillSummary,
+    need,
+    close,
+    avg,
+    homework,
+    attendance,
+    strengths,
+    needs,
+    skillNotes
+  };
 }
 
 function populateCommentVariantSelect(){
