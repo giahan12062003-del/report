@@ -53,7 +53,7 @@ h2{font-size:17px;margin:0 0 15px}
 .feedback{background:var(--pink2);border-left:4px solid var(--pink);padding:14px 16px;border-radius:0 11px 11px 0;line-height:1.7;font-size:12px;color:#4f5b6b;min-height:65px}
 .signature{text-align:right;margin-top:20px;color:#7c8795;font-size:11px}.signature b{color:var(--pink);font-size:13px}
 table.simple{width:100%;border-collapse:collapse}table.simple th,table.simple td{padding:11px;border-bottom:1px solid var(--line);text-align:left;font-size:13px}.badge{padding:5px 8px;border-radius:20px;background:#eef9f2;color:#24945a;font-weight:800}
-.hidden{display:none!important}.toast{position:fixed;right:20px;bottom:20px;background:#26364a;color:#fff;padding:12px 16px;border-radius:10px;opacity:0;transition:.2s}.toast.show{opacity:1}
+.hidden{display:none!important}.toast{position:fixed;right:20px;bottom:20px;background:#26364a;color:#fff;padding:13px 17px;border-radius:10px;opacity:0;transform:translateY(8px);pointer-events:none;transition:.2s;z-index:99999;box-shadow:0 10px 30px rgba(0,0,0,.18);font-weight:800}.toast.show{opacity:1;transform:translateY(0)}
 @media(max-width:900px){.sidebar{width:205px}.main{margin-left:205px;width:calc(100% - 205px)}.grid2{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}}
 @media(max-width:650px){.app{display:block}.sidebar{position:static;width:100%;height:auto;border-right:0;border-bottom:1px solid var(--line)}.main{margin:0;width:100%;padding:16px}.form,.info{grid-template-columns:1fr}.full{grid-column:auto}}
 @page{size:A4 portrait;margin:0}
@@ -254,8 +254,8 @@ width:210mm;height:297mm;margin:0!important;padding:0!important;background:#fff!
       <h2>💬 Nhận xét học sinh</h2>
       <div style="font-size:12px;color:#7a8492;margin-bottom:10px">Hệ thống tự kết hợp điểm số, bài tập và chuyên cần để tạo nhận xét tự nhiên hơn.</div>
       <div class="comment-mode" aria-label="Chế độ nhận xét">
-        <button type="button" class="mode-btn on" id="modeAuto" onclick="setCommentMode('auto')">✨ Tự động</button>
-        <button type="button" class="mode-btn" id="modeManual" onclick="setCommentMode('manual')">✍️ Tự viết</button>
+        <button type="button" class="mode-btn on" id="modeAuto" onclick="setCommentMode('auto');return false;">✨ Tự động</button>
+        <button type="button" class="mode-btn" id="modeManual" onclick="setCommentMode('manual');return false;">✍️ Tự viết</button>
       </div>
       <div class="comment-hint" id="commentHint">Hệ thống có nhiều mẫu nhận xét khác nhau để hạn chế trùng lặp giữa các bé.</div>
       <div class="auto-choice-row" id="autoChoiceRow">
@@ -265,12 +265,12 @@ width:210mm;height:297mm;margin:0!important;padding:0!important;background:#fff!
             <option value="random">🎲 Tự chọn mẫu khác</option>
           </select>
         </div>
-        <button type="button" class="btn pink" id="shuffleCommentBtn" onclick="shuffleComment()">🔄 Đổi nhận xét</button><button type="button" class="btn light" id="resetCommentVarBtn" onclick="resetCommentVariety()">↺ Làm mới kho mẫu</button>
+        <button type="button" class="btn pink" id="shuffleCommentBtn" onclick="shuffleComment();return false;">🔄 Đổi nhận xét</button><button type="button" class="btn light" id="resetCommentVarBtn" onclick="resetCommentVariety();return false;">↺ Làm mới kho mẫu</button>
       </div>
       <div class="feedback-box" id="autoFeedback">Chưa có nhận xét tự động.</div>
       <div class="goal-list" id="goalList"></div>
       <div class="field" style="margin-top:14px"><label id="extraLabel">NHẬN XÉT RIÊNG / CHỈNH SỬA THÊM</label><textarea id="extra" rows="4" placeholder="Bạn có thể thêm một câu riêng sau nhận xét tự động..."></textarea></div>
-      <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap"><button type="button" class="btn primary" id="autoCommentBtn" onclick="autoComment()">✨ Tạo nhận xét</button><button type="button" class="btn light" onclick="clearComment()">Xóa</button></div>
+      <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap"><button type="button" class="btn primary" id="autoCommentBtn" onclick="autoComment();return false;">✨ Tạo nhận xét</button><button type="button" class="btn light" onclick="clearComment();return false;">Xóa</button></div>
     </div>
   </div>
   <div class="preview panel"><h2>📄 Xem trước phiếu phụ huynh</h2><div id="preview"></div></div>
@@ -1003,12 +1003,25 @@ function pickAutoVariant(forceDifferent=true){
 
 function selectCommentVariant(id){
   selectedCommentVariant=id||"random";
-  if(commentMode==="auto") renderAutoFeedback();
+  if(commentMode!=="auto")return;
+  const d=automaticCommentData();
+  currentAutoComment=d;
+  const box=document.getElementById("autoFeedback"),goals=document.getElementById("goalList");
+  if(box)box.innerHTML=`<strong>Nhận xét tự động — ${esc(d.variantName)}:</strong> ${esc(d.text)}`;
+  if(goals)goals.innerHTML=d.goals.map(x=>`<div class="goal-item">🌱 ${esc(x)}</div>`).join("");
+  renderPreview();
+  toast(`Đã chọn mẫu: ${d.variantName} ✨`);
 }
 
 function shuffleComment(){
   selectedCommentVariant="random";
-  renderAutoFeedback(true);
+  const d=pickAutoVariant(true);
+  currentAutoComment=d;
+  populateCommentVariantSelect();
+  const box=document.getElementById("autoFeedback"),goals=document.getElementById("goalList");
+  if(box)box.innerHTML=`<strong>Nhận xét tự động — ${esc(d.variantName)}:</strong> ${esc(d.text)}`;
+  if(goals)goals.innerHTML=d.goals.map(x=>`<div class="goal-item">🌱 ${esc(x)}</div>`).join("");
+  renderPreview();
   toast("Đã đổi sang một nhận xét khác 🔄");
 }
 
@@ -1081,7 +1094,10 @@ function autoComment(){
   const d=pickAutoVariant(true);
   currentAutoComment=d;
   populateCommentVariantSelect();
-  renderAutoFeedback();
+  const box=document.getElementById("autoFeedback"),goals=document.getElementById("goalList");
+  if(box)box.innerHTML=`<strong>Nhận xét tự động — ${esc(d.variantName)}:</strong> ${esc(d.text)}`;
+  if(goals)goals.innerHTML=d.goals.map(x=>`<div class="goal-item">🌱 ${esc(x)}</div>`).join("");
+  renderPreview();
   toast("Đã tạo một nhận xét mới theo phong cách cô giáo ✨");
 }
 
@@ -1425,14 +1441,34 @@ window.selectCommentVariant=selectCommentVariant;
 window.shuffleComment=shuffleComment;
 window.autoComment=autoComment;
 window.resetCommentVariety=resetCommentVariety;
+window.clearComment=clearComment;
 
 function bindActionButtons(){
-  const btnPreview=document.querySelector('button[onclick="preview()"]');
-  const btnPrint=document.querySelector('button[onclick="printPDF()"]');
-  const btnSave=document.querySelector('button[onclick="saveReport()"]');
-  if(btnPreview){btnPreview.onclick=null;btnPreview.addEventListener("click",preview);}
-  if(btnPrint){btnPrint.onclick=null;btnPrint.addEventListener("click",printPDF);}
-  if(btnSave){btnSave.onclick=null;btnSave.addEventListener("click",saveReport);}
+  const btnPreview=document.querySelector('button[onclick*="preview()"]');
+  const btnPrint=document.querySelector('button[onclick*="printPDF()"]');
+  const btnSave=document.querySelector('button[onclick*="saveReport()"]');
+  if(btnPreview){btnPreview.onclick=null;btnPreview.addEventListener("click",(e)=>{e.preventDefault();preview();});}
+  if(btnPrint){btnPrint.onclick=null;btnPrint.addEventListener("click",(e)=>{e.preventDefault();printPDF();});}
+  if(btnSave){btnSave.onclick=null;btnSave.addEventListener("click",(e)=>{e.preventDefault();saveReport();});}
+
+  const autoBtn=document.getElementById("modeAuto");
+  const manualBtn=document.getElementById("modeManual");
+  const shuffleBtn=document.getElementById("shuffleCommentBtn");
+  const resetBtn=document.getElementById("resetCommentVarBtn");
+  const createCommentBtn=document.getElementById("autoCommentBtn");
+  const clearCommentBtn=[...document.querySelectorAll("button")].find(b=>b.textContent.trim()==="Xóa" && b.closest("#create"));
+  const variantSelect=document.getElementById("commentVariantSelect");
+
+  if(autoBtn){autoBtn.onclick=null;autoBtn.addEventListener("click",(e)=>{e.preventDefault();setCommentMode("auto");});}
+  if(manualBtn){manualBtn.onclick=null;manualBtn.addEventListener("click",(e)=>{e.preventDefault();setCommentMode("manual");});}
+  if(shuffleBtn){shuffleBtn.onclick=null;shuffleBtn.addEventListener("click",(e)=>{e.preventDefault();shuffleComment();});}
+  if(resetBtn){resetBtn.onclick=null;resetBtn.addEventListener("click",(e)=>{e.preventDefault();resetCommentVariety();});}
+  if(createCommentBtn){createCommentBtn.onclick=null;createCommentBtn.addEventListener("click",(e)=>{e.preventDefault();autoComment();});}
+  if(clearCommentBtn){clearCommentBtn.onclick=null;clearCommentBtn.addEventListener("click",(e)=>{e.preventDefault();clearComment();});}
+  if(variantSelect){
+    variantSelect.onchange=null;
+    variantSelect.addEventListener("change",()=>selectCommentVariant(variantSelect.value));
+  }
 }
 
 document.getElementById("date").value=today();
