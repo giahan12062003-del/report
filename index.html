@@ -59,6 +59,11 @@ table.simple{width:100%;border-collapse:collapse}table.simple th,table.simple td
 @page{size:A4 portrait;margin:0}
 .pdf-page{display:none}
 
+
+@media print{
+  .pdf-score-pills{display:none!important}
+}
+
 @media print{
   html,body{font-family:"Be Vietnam Pro",Arial,sans-serif;
 width:210mm;height:297mm;margin:0!important;padding:0!important;background:#fff!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
@@ -89,13 +94,9 @@ width:210mm;height:297mm;margin:0!important;padding:0!important;background:#fff!
   .pdf-title{display:flex;align-items:center;gap:2mm;font-size:9pt;letter-spacing:1.7px;text-transform:uppercase;color:#2f8798;font-weight:900;margin:3.5mm 0 2mm}
   .pdf-title:before{content:"";width:7mm;height:1.8mm;border-radius:99px;background:#c00000}
   .pdf-table{width:100%;border-collapse:separate;border-spacing:0;border:1px solid #d9e6ea;border-radius:3.5mm;overflow:hidden;box-shadow:0 1.2mm 3mm rgba(38,54,74,.035)}
-  .pdf-table th{background:#eef9fb;color:#55727c;text-transform:uppercase;font-size:9pt;letter-spacing:.5px;padding:3.4mm 4mm;text-align:left}
-  .pdf-table td{font-size:11pt;padding:4.2mm 4mm;border-top:1px solid #e8eef1;color:#334155}
+  .pdf-table th{background:#eef9fb;color:#55727c;text-transform:uppercase;font-size:9.2pt;letter-spacing:.5px;padding:3.4mm 4mm;text-align:left}
+  .pdf-table td{font-size:11.5pt;padding:4.6mm 4mm;border-top:1px solid #e8eef1;color:#334155}
   .pdf-table td:last-child{text-align:right;font-weight:900;color:#c00000;font-size:11pt}
-  .pdf-score-pills{display:grid;grid-template-columns:repeat(3,1fr);gap:3.5mm;margin-top:3.5mm}
-  .pdf-score-pill{padding:3mm 3.5mm;border-radius:3mm;border:1px solid #dfe8ec;background:#fbfcfd}
-  .pdf-score-pill small{display:block;font-size:8pt;color:#788596;text-transform:uppercase;font-weight:900}
-  .pdf-score-pill b{display:block;margin-top:1mm;font-size:16pt;color:#c00000}
   .pdf-habits{display:grid;grid-template-columns:1fr 1fr;gap:4mm;margin-top:3.5mm}
   .pdf-habit{padding:3.5mm 4mm;border-radius:3.5mm;background:linear-gradient(135deg,#f2fbfd,#fff5f8);border:1px solid #dce9ed}
   .pdf-habit .label{font-size:8.5pt;color:#718096;text-transform:uppercase;letter-spacing:.5px;font-weight:900}
@@ -387,12 +388,7 @@ width:210mm;height:297mm;margin:0!important;padding:0!important;background:#fff!
    <div class="pdf-lesson bilingual-label"><b>Lesson: <span class="vn">Bài học / Chủ đề</span></b> <span id="pLesson">—</span></div>
    <div class="pdf-title">EVALUATE SCORE <span class="vn">ĐÁNH GIÁ KẾT QUẢ</span></div>
    <table class="pdf-table"><thead><tr><th class="bilingual-label">Learning Skill <span class="vn">Kỹ năng học tập</span></th><th class="bilingual-label">Score <span class="vn">Điểm</span></th></tr></thead><tbody id="pScores"></tbody></table>
-   <div class="pdf-score-pills">
-    <div class="pdf-score-pill bilingual-label"><small>Listening <span class="vn">Nghe</span></small><b id="pSkill0">0.0/10</b></div>
-    <div class="pdf-score-pill bilingual-label"><small>Speaking <span class="vn">Nói</span></small><b id="pSkill1">0.0/10</b></div>
-    <div class="pdf-score-pill bilingual-label"><small>Reading &amp; Writing <span class="vn">Đọc &amp; Viết</span></small><b id="pSkill2">0.0/10</b></div>
-   </div>
-   <div class="pdf-title">LEARNING HABITS <span class="vn">THÓI QUEN HỌC TẬP</span></div>
+<div class="pdf-title">LEARNING HABITS <span class="vn">THÓI QUEN HỌC TẬP</span></div>
    <div class="pdf-habits">
     <div class="pdf-habit"><div class="label bilingual-label">Homework Completion <span class="vn">Hoàn thành bài tập</span></div><div class="value"><strong id="pHomework">100%</strong><span id="pHomeworkStatus" class="bilingual-label">—</span></div><div class="pdf-progress"><span id="pHomeworkBar" style="width:100%"></span></div></div>
     <div class="pdf-habit"><div class="label bilingual-label">Attendance <span class="vn">Chuyên cần</span></div><div class="value"><strong id="pAttendance">100%</strong><span id="pAttendanceStatus" class="bilingual-label">—</span></div><div class="pdf-progress"><span id="pAttendanceBar" style="width:100%"></span></div></div>
